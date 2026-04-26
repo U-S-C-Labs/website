@@ -3,2159 +3,601 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>USC Labs — Independent Research</title>
+  <title>USC Labs — Unified Systems Chain</title>
+  <meta name="description" content="Independent systems research. Formal verification. Neural substrates. Sovereign computing. South Africa." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300&family=Inter:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      /* Neomorphic base — cool neutral grey */
-      --bg:   #e8edf5;
-      --bg-2: #eef2f8;
-
-      /* Shadow pair for neomorphism */
-      --sh-dark:  rgba(163, 177, 198, 0.62);
-      --sh-light: rgba(255, 255, 255, 0.88);
-
-      /* Neomorphic presets */
-      --nm-raised:  8px 8px 20px var(--sh-dark), -8px -8px 20px var(--sh-light);
-      --nm-raised-sm: 5px 5px 12px var(--sh-dark), -5px -5px 12px var(--sh-light);
-      --nm-inset:   inset 5px 5px 12px var(--sh-dark), inset -5px -5px 12px var(--sh-light);
-      --nm-inset-sm: inset 3px 3px 8px var(--sh-dark), inset -3px -3px 8px var(--sh-light);
-      --nm-btn:     6px 6px 16px var(--sh-dark), -3px -3px 10px var(--sh-light);
-
-      --text-1: #1a1e2e;
-      --text-2: #5c6480;
-      --text-3: #9aa0b8;
-
-      --radius-sm:  8px;
-      --radius-md:  16px;
-      --radius-lg:  24px;
-      --radius-xl:  32px;
-
-      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --bg:      #ffffff;
+      --ink:     #0a0a0a;
+      --ink-2:   #4a4a4a;
+      --ink-3:   #a0a0a0;
+      --line:    #e0e0e0;
+      --red:     #c8000a;
+      --red-2:   #ff1a26;
       --font-mono: 'JetBrains Mono', monospace;
-      --ease: cubic-bezier(.16,1,.3,1);
+      --font-sans: 'Inter', system-ui, sans-serif;
       --max: 1080px;
     }
 
     html { scroll-behavior: smooth; }
-
-    body {
-      font-family: var(--font-sans);
-      background: var(--bg);
-      color: var(--text-1);
-      line-height: 1.65;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
-
-    ::-webkit-scrollbar { width: 4px; }
+    body { font-family: var(--font-sans); background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    ::-webkit-scrollbar { width: 2px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--sh-dark); border-radius: 99px; }
-
-    /* ── Nav ──────────────────────────────────────────────────── */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(232,237,245,0.82);
-      backdrop-filter: saturate(180%) blur(24px);
-      -webkit-backdrop-filter: saturate(180%) blur(24px);
-      border-bottom: 1px solid rgba(255,255,255,0.6);
-      box-shadow: 0 2px 20px rgba(163,177,198,0.25);
-    }
-
-    .nav-inner {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 0 2rem;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 2rem;
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      color: var(--text-1);
-    }
-
-    .nav-logo { height: 26px; display: flex; align-items: center; }
-    .nav-logo svg { height: 26px; width: auto; }
-
-    .nav-name { font-weight: 600; font-size: 0.9rem; letter-spacing: -0.01em; }
-
-    .nav-links { display: flex; align-items: center; }
-
-    .nav-links a {
-      color: var(--text-2);
-      text-decoration: none;
-      font-size: 0.83rem;
-      font-weight: 500;
-      padding: 0.38rem 0.75rem;
-      border-radius: var(--radius-sm);
-      transition: color 0.15s;
-    }
-
-    .nav-links a:hover { color: var(--text-1); }
-
-    .status-pill {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.73rem;
-      color: var(--text-3);
-      font-family: var(--font-mono);
-      padding: 0.3rem 0.75rem;
-      border-radius: 99px;
-      box-shadow: var(--nm-inset-sm);
-    }
-
-    .status-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: #30d158;
-      box-shadow: 0 0 6px #30d158;
-      animation: pulse 2.4s ease-in-out infinite;
-    }
-
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-    /* ── Epoch bar ───────────────────────────────────────────── */
-    .epoch-bar {
-      background: rgba(232,237,245,0.55);
-      border-bottom: 1px solid rgba(163,177,198,0.12);
-      padding: 0.28rem 2rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      overflow: hidden;
-    }
-
-    .epoch-label {
-      font-family: var(--font-mono);
-      font-size: 0.55rem;
-      letter-spacing: 0.09em;
-      color: rgba(154,160,184,0.55);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .epoch-bits {
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-      flex-wrap: nowrap;
-    }
-
-    .epoch-unit {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-    }
-
-    .epoch-bit {
-      width: 4px; height: 4px;
-      border-radius: 1px;
-      background: rgba(154,160,184,0.18);
-      transition: background 0.4s ease;
-      flex-shrink: 0;
-    }
-
-    .epoch-bit.on {
-      background: rgba(154,160,184,0.52);
-    }
-
-    .epoch-sep {
-      font-family: var(--font-mono);
-      font-size: 0.5rem;
-      color: rgba(154,160,184,0.25);
-      line-height: 1;
-    }
-
-    /* ── Shell ────────────────────────────────────────────────── */
-    .shell { max-width: var(--max); margin: 0 auto; padding: 0 2rem; }
-
-    /* ── Hero ─────────────────────────────────────────────────── */
-    .hero-wrap {
-      position: relative;
-      overflow: hidden;
-    }
-
-    #hero-canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .hero {
-      position: relative;
-      z-index: 1;
-      padding: 7rem 0 6rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    /* ── Genesis terminal ─────────────────────────────────────── */
-    .genesis-terminal {
-      width: 100%;
-      max-width: 700px;
-      margin-bottom: 3.5rem;
-    }
-
-    .genesis-bar {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 0.55rem 1rem;
-      background: var(--bg);
-      border-radius: var(--radius-md) var(--radius-md) 0 0;
-      box-shadow: 4px 0 0 var(--sh-dark), -4px 0 0 var(--sh-light), 0 -4px 0 var(--sh-light);
-    }
-
-    .genesis-dot {
-      width: 9px; height: 9px;
-      border-radius: 50%;
-      box-shadow: var(--nm-raised-sm);
-      background: var(--bg);
-    }
-
-    .genesis-title {
-      flex: 1;
-      text-align: center;
-      font-family: var(--font-mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.12em;
-      color: var(--text-3);
-    }
-
-    .genesis-body {
-      background: var(--bg);
-      border-radius: 0 0 var(--radius-md) var(--radius-md);
-      box-shadow: var(--nm-inset);
-      padding: 1.8rem 2rem 1.5rem;
-      min-height: 320px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-    }
-
-    .genesis-output {
-      font-family: var(--font-mono);
-      font-size: 0.76rem;
-      line-height: 1.75;
-      color: var(--text-2);
-      text-align: left;
-      word-break: break-word;
-      white-space: pre-wrap;
-      flex: 1;
-    }
-
-    .genesis-output .g-comment  { color: var(--text-3); }
-    .genesis-output .g-keyword  { color: var(--text-2); font-weight: 600; }
-    .genesis-output .g-value    { color: var(--text-1); }
-    .genesis-output .g-label    { color: var(--text-3); letter-spacing: 0.08em; }
-    .genesis-output .g-cursor   { display: inline-block; width: 7px; height: 0.85em; background: var(--text-3); opacity: 0.7; animation: blink-char 1s step-end infinite; vertical-align: text-bottom; margin-left: 1px; }
-
-    .genesis-output .g-logo {
-      color: var(--text-2);
-      white-space: pre;
-      display: inline;
-    }
-
-    .genesis-output .g-brand-label {
-      color: var(--text-1);
-      font-weight: 600;
-      letter-spacing: 0.04em;
-    }
-
-    .genesis-output .g-brand-sub {
-      color: var(--text-3);
-      letter-spacing: 0.06em;
-    }
-
-    .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-
-    /* ── Neomorphic Buttons ───────────────────────────────────── */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 0.65rem 1.5rem;
-      border-radius: 99px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s var(--ease);
-      letter-spacing: -0.01em;
-    }
-
-    .btn-primary {
-      background: var(--bg);
-      color: var(--text-1);
-      box-shadow: var(--nm-btn);
-    }
-
-    .btn-primary:hover {
-      box-shadow: 4px 4px 12px var(--sh-dark), -2px -2px 8px var(--sh-light);
-      transform: translateY(1px);
-    }
-
-    .btn-primary:active {
-      box-shadow: var(--nm-inset);
-      transform: translateY(2px);
-    }
-
-    .btn-inset {
-      background: var(--bg);
-      color: var(--text-2);
-      box-shadow: var(--nm-inset-sm);
-    }
-
-    .btn-inset:hover { color: var(--text-1); }
-
-    /* ── Section chrome ───────────────────────────────────────── */
-    .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(163,177,198,0.3), transparent); }
-
-    .section { padding: 6rem 0; }
-
-    .section-kicker {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 0.5rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1.15;
-      margin-bottom: 0.6rem;
-    }
-
-    .section-desc {
-      font-size: 0.95rem;
-      color: var(--text-2);
-      max-width: 480px;
-      line-height: 1.75;
-      margin-bottom: 3.5rem;
-    }
-
-    /* ── Stats ────────────────────────────────────────────────── */
-    .stats-strip {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 1.25rem;
-      margin: 0 0 0 0;
-    }
-
-    .stat {
-      background: var(--bg);
-      border-radius: var(--radius-lg);
-      padding: 2rem 1.25rem;
-      text-align: center;
-      box-shadow: var(--nm-raised-sm);
-      transition: box-shadow 0.2s var(--ease);
-    }
-
-    .stat:hover { box-shadow: var(--nm-raised); }
-
-    .stat-n {
-      font-size: 2.2rem;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1;
-      margin-bottom: 0.35rem;
-      color: var(--text-1);
-    }
-
-    .stat-l {
-      font-size: 0.72rem;
-      color: var(--text-3);
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    /* ── Neomorphic card ──────────────────────────────────────── */
-    .nm-card {
-      background: var(--bg);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--nm-raised);
-      transition: box-shadow 0.3s var(--ease), transform 0.3s var(--ease);
-    }
-
-    .nm-card:hover {
-      box-shadow: 12px 12px 28px var(--sh-dark), -12px -12px 28px var(--sh-light);
-      transform: translateY(-2px);
-    }
-
-    /* ── Featured: Vero+SECKAN ────────────────────────────────── */
-    .vero-featured {
-      padding: 3.5rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: start;
-      margin-bottom: 0;
-    }
-
-    .vf-eyebrow {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 1rem;
-    }
-
-    .vf-title {
-      font-size: 1.9rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1.18;
-      margin-bottom: 1rem;
-    }
-
-    .vf-desc {
-      font-size: 0.9rem;
-      color: var(--text-2);
-      line-height: 1.8;
-      margin-bottom: 1.75rem;
-    }
-
-    .vf-links { display: flex; gap: 0.65rem; flex-wrap: wrap; }
-
-    /* Vero code panel — inset neomorphic */
-    .vero-panel {
-      background: var(--bg);
-      border-radius: var(--radius-lg);
-      padding: 1.75rem;
-      box-shadow: var(--nm-inset);
-      font-family: var(--font-mono);
-      font-size: 0.73rem;
-      line-height: 2;
-      color: var(--text-3);
-    }
-
-    .vero-panel .vp-comment { color: var(--text-3); }
-    .vero-panel .vp-kw     { color: var(--text-2); font-weight: 600; }
-    .vero-panel .vp-key    { color: var(--text-2); }
-    .vero-panel .vp-val    { color: var(--text-1); font-weight: 500; }
-    .vero-panel .vp-ok     { color: #30d158; font-weight: 600; }
-    .vero-panel .vp-err    { color: #ff453a; font-weight: 600; }
-
-    .vero-panel .vp-block {
-      background: var(--bg-2);
-      border-radius: var(--radius-sm);
-      padding: 0.6rem 0.85rem;
-      margin: 0.5rem 0;
-      box-shadow: 2px 2px 6px var(--sh-dark), -2px -2px 6px var(--sh-light);
-    }
-
-    /* ── Projects grid ────────────────────────────────────────── */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .card {
-      background: var(--bg);
-      border-radius: var(--radius-xl);
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      box-shadow: var(--nm-raised-sm);
-      transition: box-shadow 0.3s var(--ease), transform 0.3s var(--ease);
-      cursor: default;
-    }
-
-    .card:hover {
-      box-shadow: var(--nm-raised);
-      transform: translateY(-2px);
-    }
-
-    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
-
-    .card-icon { font-size: 2rem; line-height: 1; }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.67rem;
-      font-weight: 600;
-      padding: 0.22rem 0.6rem;
-      border-radius: 99px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      box-shadow: var(--nm-inset-sm);
-      color: var(--text-2);
-    }
-
-    .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
-    .badge-active { color: #1c7a3f; }
-    .badge-active .badge-dot { background: #30d158; animation: pulse 2s infinite; box-shadow: 0 0 4px #30d158; }
-    .badge-open   { color: #1c5c8a; }
-    .badge-open .badge-dot { background: #3b8ae8; }
-    .badge-research { color: #7a5000; }
-    .badge-research .badge-dot { background: #f59e0b; }
-    .badge-sensitive { color: var(--text-2); }
-    .badge-sensitive .badge-dot { background: var(--text-3); }
-    .badge-archive { color: var(--text-3); }
-    .badge-archive .badge-dot { background: var(--text-3); opacity: 0.5; }
-
-    .card-title { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.1rem; }
-    .card-sub   { font-size: 0.75rem; color: var(--text-3); font-family: var(--font-mono); }
-    .card-desc  { font-size: 0.875rem; color: var(--text-2); line-height: 1.7; flex: 1; }
-
-    .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-
-    .tag {
-      font-size: 0.7rem;
-      font-family: var(--font-mono);
-      color: var(--text-3);
-      padding: 0.18rem 0.5rem;
-      border-radius: var(--radius-sm);
-      box-shadow: var(--nm-inset-sm);
-    }
-
-    .card-links {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      padding-top: 0.75rem;
-      border-top: 1px solid rgba(163,177,198,0.25);
-    }
-
-    .link-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.35rem 0.85rem;
-      border-radius: 99px;
-      text-decoration: none;
-      color: var(--text-2);
-      box-shadow: var(--nm-raised-sm);
-      transition: all 0.2s var(--ease);
-    }
-
-    .link-btn:hover {
-      color: var(--text-1);
-      box-shadow: var(--nm-raised);
-    }
-
-    .link-btn:active { box-shadow: var(--nm-inset-sm); }
-
-    .link-btn.primary {
-      color: var(--text-1);
-      font-weight: 700;
-      box-shadow: var(--nm-btn);
-    }
-
-    .link-btn.primary:hover { box-shadow: var(--nm-raised); }
-
-    /* ── Kernel diagram card ──────────────────────────────────── */
-    .kernel-card {
-      padding: 3.5rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: start;
-    }
-
-    .kc-title { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 1rem; }
-    .kc-desc  { font-size: 0.9rem; color: var(--text-2); line-height: 1.8; margin-bottom: 1.75rem; }
-
-    .kernel-rings { display: flex; flex-direction: column; gap: 0.65rem; }
-
-    .k-ring {
-      background: var(--bg);
-      border-radius: var(--radius-md);
-      padding: 0.9rem 1.1rem;
-      box-shadow: var(--nm-inset-sm);
-    }
-
-    .k-ring-label {
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 0.2rem;
-    }
-
-    .k-ring-name { font-weight: 600; font-size: 0.88rem; color: var(--text-1); }
-
-    .k-ring.ring-0 {
-      box-shadow: var(--nm-raised-sm);
-    }
-
-    .k-ring.ring-0 .k-ring-name { font-size: 0.92rem; }
-
-    .proof-note {
-      font-family: var(--font-mono);
-      font-size: 0.62rem;
-      color: var(--text-3);
-      margin-top: 0.85rem;
-      padding: 0.5rem 0.75rem;
-      box-shadow: var(--nm-inset-sm);
-      border-radius: var(--radius-sm);
-      line-height: 1.7;
-    }
-
-    /* ── COSMIC showcase ──────────────────────────────────────── */
-    .cosmic-card {
-      padding: 3.5rem;
-      display: grid;
-      grid-template-columns: 1fr 1.25fr;
-      gap: 3rem;
-      align-items: center;
-    }
-
-    .c-eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); margin-bottom: 0.75rem; }
-    .c-title   { font-size: 1.7rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 1rem; }
-    .c-desc    { font-size: 0.875rem; color: var(--text-2); line-height: 1.8; margin-bottom: 1.25rem; }
-
-    .feature-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1.75rem; }
-    .feature-list li { display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.85rem; color: var(--text-2); }
-    .feature-list li::before { content: '→'; color: var(--text-3); flex-shrink: 0; margin-top: 1px; }
-
-    /* Desktop mockup — neomorphic inset screen */
-    .desktop-wrap {
-      background: var(--bg);
-      border-radius: var(--radius-xl);
-      padding: 1rem;
-      box-shadow: var(--nm-inset);
-    }
-
-    .desktop-mockup {
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      aspect-ratio: 16/10;
-      background: #0d0f14;
-      display: flex;
-      flex-direction: column;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
-    }
-
-    .dm-bar {
-      height: 28px;
-      background: #161820;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      display: flex;
-      align-items: center;
-      padding: 0 10px;
-      gap: 5px;
-      flex-shrink: 0;
-    }
-
-    .dm-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .dm-dot-r { background: #ff5f57; }
-    .dm-dot-y { background: #febc2e; }
-    .dm-dot-g { background: #28c840; }
-
-    .dm-title {
-      flex: 1;
-      text-align: center;
-      font-size: 0.55rem;
-      font-family: var(--font-mono);
-      color: rgba(255,255,255,0.25);
-      letter-spacing: 0.06em;
-    }
-
-    .dm-body { flex: 1; display: grid; grid-template-columns: 48px 1fr; overflow: hidden; }
-
-    .dm-sidebar {
-      background: #111318;
-      border-right: 1px solid rgba(255,255,255,0.04);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 8px 0;
-      gap: 8px;
-    }
-
-    .dm-icon { width: 30px; height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
-
-    .dm-main { display: grid; grid-template-rows: 1fr 1fr; gap: 6px; padding: 8px; background: #0d0f14; }
-
-    .dm-panel {
-      background: #0a0c10;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,0.05);
-      overflow: hidden;
-    }
-
-    .dm-panel-title {
-      font-size: 0.48rem;
-      font-family: var(--font-mono);
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.25);
-      padding: 4px 7px;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-
-    .nn-canvas { width: 100%; height: calc(100% - 20px); display: flex; align-items: center; justify-content: center; }
-
-    .log-lines { padding: 4px 7px; font-family: var(--font-mono); font-size: 0.44rem; line-height: 1.75; }
-    .log-ok   { color: #30d158; }
-    .log-info { color: rgba(255,255,255,0.38); }
-    .log-warn { color: #ffd60a; }
-
-    /* ── Architecture table ───────────────────────────────────── */
-    .arch-nm {
-      background: var(--bg);
-      border-radius: var(--radius-xl);
-      padding: 0.5rem;
-      box-shadow: var(--nm-raised);
-      overflow: hidden;
-    }
-
-    .arch-table { width: 100%; border-collapse: collapse; }
-
-    .arch-table tr { border-bottom: 1px solid rgba(163,177,198,0.2); transition: background 0.15s; }
-    .arch-table tr:last-child { border-bottom: none; }
-    .arch-table tr:hover { background: rgba(255,255,255,0.4); }
-
-    .arch-table td { padding: 1.25rem 1.5rem; vertical-align: top; }
-
-    .arch-table td:first-child  { width: 72px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-3); letter-spacing: 0.05em; padding-top: 1.4rem; }
-    .arch-table td:nth-child(2) { width: 220px; font-weight: 600; font-size: 0.92rem; }
-    .arch-table td:last-child   { font-size: 0.85rem; color: var(--text-2); line-height: 1.65; }
-
-    /* ── Timeline ─────────────────────────────────────────────── */
-    .timeline { display: flex; flex-direction: column; }
-
-    .tl-item {
-      display: grid;
-      grid-template-columns: 90px 24px 1fr;
-      gap: 0 1.5rem;
-      padding-bottom: 2.25rem;
-    }
-
-    .tl-item:last-child { padding-bottom: 0; }
-
-    .tl-meta { text-align: right; padding-top: 2px; }
-    .tl-tag  { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-3); }
-    .tl-ms   { font-family: var(--font-mono); font-size: 0.82rem; font-weight: 600; color: var(--text-1); }
-
-    .tl-spine { display: flex; flex-direction: column; align-items: center; }
-
-    .tl-dot {
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin-top: 2px;
-      box-shadow: var(--nm-raised-sm);
-      background: var(--bg);
-    }
-
-    .tl-item.done .tl-dot {
-      box-shadow: var(--nm-inset-sm);
-      background: var(--bg);
-    }
-
-    .tl-item.done .tl-dot::after {
-      content: '';
-      display: block;
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--text-1);
-      margin: 3px;
-    }
-
-    .tl-item.current .tl-dot {
-      box-shadow: 0 0 0 3px rgba(163,177,198,0.4), var(--nm-raised-sm);
-      animation: pulse 2s infinite;
-    }
-
-    .tl-line { flex: 1; width: 1px; background: rgba(163,177,198,0.3); margin-top: 4px; }
-    .tl-item:last-child .tl-line { display: none; }
-
-    .tl-body { padding-top: 0; }
-    .tl-title { font-weight: 600; font-size: 0.92rem; margin-bottom: 0.3rem; }
-    .tl-desc  { font-size: 0.83rem; color: var(--text-2); line-height: 1.65; }
-
-    /* ── Vero primitives ──────────────────────────────────────── */
-    .prim-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .prim-cell {
-      background: var(--bg);
-      border-radius: var(--radius-xl);
-      padding: 2rem;
-      box-shadow: var(--nm-raised-sm);
-      transition: box-shadow 0.3s var(--ease), transform 0.3s var(--ease);
-    }
-
-    .prim-cell:hover { box-shadow: var(--nm-raised); transform: translateY(-2px); }
-
-    .prim-glyph  { font-size: 1.4rem; font-family: var(--font-mono); color: var(--text-3); margin-bottom: 0.85rem; line-height: 1; }
-    .prim-name   { font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; }
-    .prim-desc   { font-size: 0.84rem; color: var(--text-2); line-height: 1.7; margin-bottom: 0.9rem; }
-
-    .prim-code {
-      font-family: var(--font-mono);
-      font-size: 0.67rem;
-      color: var(--text-2);
-      padding: 0.32rem 0.6rem;
-      border-radius: var(--radius-sm);
-      display: inline-block;
-      box-shadow: var(--nm-inset-sm);
-    }
-
-    /* ── Stack ────────────────────────────────────────────────── */
-    .stack-nm {
-      background: var(--bg);
-      border-radius: var(--radius-xl);
-      padding: 2.5rem;
-      box-shadow: var(--nm-raised);
-    }
-
-    .stack-rows { display: flex; flex-direction: column; gap: 1.75rem; }
-
-    .stack-row {
-      display: grid;
-      grid-template-columns: 160px 1fr;
-      gap: 1.5rem;
-      align-items: start;
-      padding-bottom: 1.75rem;
-      border-bottom: 1px solid rgba(163,177,198,0.2);
-    }
-
-    .stack-row:last-child { border-bottom: none; padding-bottom: 0; }
-
-    .stack-cat { font-size: 0.78rem; font-weight: 600; color: var(--text-2); padding-top: 0.3rem; }
-
-    .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
-
-    .chip {
-      font-size: 0.77rem;
-      font-family: var(--font-mono);
-      color: var(--text-2);
-      padding: 0.3rem 0.7rem;
-      border-radius: var(--radius-sm);
-      box-shadow: var(--nm-inset-sm);
-      transition: box-shadow 0.15s, color 0.15s;
-    }
-
-    .chip:hover { color: var(--text-1); box-shadow: var(--nm-raised-sm); }
-
-    @keyframes blink-char { 0%,100%{opacity:1} 50%{opacity:0} }
-
-    /* ── Footer ───────────────────────────────────────────────── */
-    footer { padding: 3.5rem 0; text-align: center; }
-
-    .footer-logo-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 0.75rem;
-    }
-
-    .footer-logo-row svg { height: 20px; width: auto; opacity: 0.3; }
-
-    .footer-name { font-weight: 700; font-size: 0.95rem; letter-spacing: -0.02em; color: var(--text-1); }
-    .footer-sub  { font-size: 0.76rem; color: var(--text-3); font-family: var(--font-mono); line-height: 1.8; }
-
-    /* ── Contact ──────────────────────────────────────────────── */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .contact-card {
-      background: var(--bg);
-      border-radius: var(--radius-xl);
-      padding: 2rem;
-      box-shadow: var(--nm-raised-sm);
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+    ::-webkit-scrollbar-thumb { background: var(--ink); }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 2.5rem; }
+
+    /* ── Nav ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--ink); }
+    .nav-inner { max-width: var(--max); margin: 0 auto; padding: 0 2.5rem; height: 48px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: var(--font-mono); font-size: 0.78rem; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase; }
+    .nav-logo span { color: var(--red); }
+    .nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-2); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--red); }
+
+    /* ── Hero ── */
+    #home { min-height: 100vh; display: flex; align-items: flex-end; padding: 0 0 6rem; border-bottom: 1px solid var(--ink); }
+    .hero-inner { width: 100%; }
+    .hero-eyebrow { font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 2rem; }
+    .hero-title { font-family: var(--font-mono); font-size: clamp(3rem, 8vw, 7.5rem); font-weight: 700; line-height: 0.92; letter-spacing: -0.03em; text-transform: uppercase; margin-bottom: 4rem; }
+    .hero-title .red { color: var(--red); }
+    .hero-bottom { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; align-items: end; border-top: 1px solid var(--line); padding-top: 2.5rem; }
+    .hero-stat { display: flex; flex-direction: column; gap: 0.3rem; }
+    .hero-stat-num { font-family: var(--font-mono); font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+    .hero-stat-num.red { color: var(--red); }
+    .hero-stat-label { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-3); letter-spacing: 0.1em; text-transform: uppercase; }
+    .hero-cta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.8rem; }
+    .btn { display: inline-block; font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.8rem 1.8rem; text-decoration: none; transition: all 0.15s; }
+    .btn-red { background: var(--red); color: #fff; border: 1px solid var(--red); }
+    .btn-red:hover { background: var(--red-2); border-color: var(--red-2); }
+    .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+    .btn-outline:hover { background: var(--ink); color: var(--bg); }
+
+    /* ── Section structure ── */
+    .section-header { display: flex; align-items: baseline; gap: 2rem; margin-bottom: 4rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--ink); }
+    .section-num { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-3); letter-spacing: 0.1em; min-width: 3ch; }
+    h2 { font-family: var(--font-mono); font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; letter-spacing: -0.025em; text-transform: uppercase; line-height: 1; }
+    h2 .red { color: var(--red); }
+    .section-desc { margin-left: auto; max-width: 360px; font-size: 0.85rem; color: var(--ink-2); line-height: 1.7; text-align: right; }
+
+    /* ── Stack rows ── */
+    .stack-rows { display: flex; flex-direction: column; }
+    .stack-row { display: grid; grid-template-columns: 80px 1fr 2fr 120px; gap: 2rem; align-items: start; padding: 2rem 0; border-bottom: 1px solid var(--line); transition: background 0.1s; }
+    .stack-row:hover { background: #fafafa; }
+    .stack-row:last-child { border-bottom: none; }
+    .stack-layer { font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-3); letter-spacing: 0.1em; text-transform: uppercase; padding-top: 3px; }
+    .stack-name { font-family: var(--font-mono); font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
+    .stack-desc { font-size: 0.85rem; color: var(--ink-2); line-height: 1.7; }
+    .status { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.7rem; border: 1px solid; text-align: center; }
+    .status-live { color: #157a3a; border-color: #157a3a; background: #f0faf4; }
+    .status-build { color: var(--red); border-color: var(--red); background: #fff5f5; }
+
+    /* ── Research ── */
+    #research { padding: 6rem 0; border-bottom: 1px solid var(--ink); }
+    .projects-list { display: flex; flex-direction: column; }
+    .project-item { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; padding: 3rem 0; border-bottom: 1px solid var(--line); align-items: start; }
+    .project-item:last-child { border-bottom: none; }
+    .project-id { font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.8rem; }
+    h3 { font-family: var(--font-mono); font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; text-transform: uppercase; }
+    h3 .red { color: var(--red); }
+    .project-item p { font-size: 0.88rem; color: var(--ink-2); line-height: 1.8; }
+    .project-item p strong { color: var(--ink); font-weight: 600; }
+
+    /* ── Spec block ── */
+    .spec-block { border: 1px solid var(--line); }
+    .spec-row { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--line); }
+    .spec-row:last-child { border-bottom: none; }
+    .spec-k, .spec-v { font-family: var(--font-mono); font-size: 0.72rem; padding: 0.6rem 0.8rem; letter-spacing: 0.02em; }
+    .spec-k { color: var(--ink-3); border-right: 1px solid var(--line); }
+    .spec-v { color: var(--ink); }
+    .spec-v.ok { color: #157a3a; }
+    .spec-v.warn { color: var(--red); }
+
+    /* ── Philosophy ── */
+    #philosophy { padding: 6rem 0; border-bottom: 1px solid var(--ink); }
+    .law-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+    .law-list { list-style: none; display: flex; flex-direction: column; }
+    .law-item { display: grid; grid-template-columns: 32px 1fr; gap: 1rem; padding: 0.55rem 0; border-bottom: 1px solid var(--line); font-size: 0.84rem; align-items: baseline; }
+    .law-item:last-child { border-bottom: none; }
+    .law-n { font-family: var(--font-mono); font-size: 0.62rem; color: var(--ink-3); letter-spacing: 0.06em; }
+    .law-t { color: var(--ink-2); }
+    .law-item.sovereign .law-n { color: var(--red); }
+    .law-item.sovereign .law-t { color: var(--ink); font-weight: 500; }
+    .quote-block { display: flex; flex-direction: column; gap: 2.5rem; }
+    .quote { border-left: 3px solid var(--ink); padding: 1.5rem 1.8rem; }
+    .quote.red-line { border-left-color: var(--red); }
+    blockquote { font-family: var(--font-sans); font-size: 1.15rem; font-style: italic; font-weight: 300; color: var(--ink); line-height: 1.7; margin-bottom: 0.8rem; }
+    .q-attr { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase; }
+
+    /* ── Publications ── */
+    .pub-item { display: grid; grid-template-columns: 1fr auto; gap: 2rem; padding: 2.5rem 0; border-bottom: 1px solid var(--line); align-items: start; }
+    .pub-item:last-child { border-bottom: none; }
+    .pub-type { font-family: var(--font-mono); font-size: 0.62rem; color: var(--ink-3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.6rem; }
+    .pub-title { font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.5rem; }
+    .pub-meta { font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-3); letter-spacing: 0.04em; margin-bottom: 0.8rem; }
+    .pub-meta span { margin-right: 1.5rem; }
+    .pub-abstract { font-size: 0.86rem; color: var(--ink-2); line-height: 1.75; max-width: 680px; }
+    .pub-links { display: flex; flex-direction: column; gap: 0.6rem; align-items: flex-end; }
+    .pub-link { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.5rem 1rem; text-decoration: none; border: 1px solid var(--ink); color: var(--ink); transition: all 0.15s; white-space: nowrap; }
+    .pub-link:hover { background: var(--ink); color: var(--bg); }
+    .pub-link.red-link { border-color: var(--red); color: var(--red); }
+    .pub-link.red-link:hover { background: var(--red); color: #fff; }
+
+    /* ── About ── */
+    #about { padding: 6rem 0; border-bottom: 1px solid var(--ink); }
+    .about-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 5rem; align-items: start; }
+    .about-body p { font-size: 1rem; color: var(--ink-2); line-height: 1.85; margin-bottom: 1.4rem; }
+    .about-body p strong { color: var(--ink); font-weight: 600; }
+    .id-card { border: 1px solid var(--ink); }
+    .id-row { display: flex; flex-direction: column; gap: 0.15rem; padding: 0.8rem 1rem; border-bottom: 1px solid var(--line); }
+    .id-row:last-child { border-bottom: none; }
+    .id-f { font-family: var(--font-mono); font-size: 0.58rem; color: var(--ink-3); letter-spacing: 0.12em; text-transform: uppercase; }
+    .id-v { font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink); }
+
+    /* ── Terminal ── */
+    .terminal { border: 1px solid var(--ink); font-family: var(--font-mono); font-size: 0.76rem; background: #fafafa; }
+    .t-bar { border-bottom: 1px solid var(--ink); padding: 0.5rem 0.8rem; display: flex; align-items: center; gap: 0.4rem; background: var(--ink); color: #fff; }
+    .t-bar-title { font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.6; }
+    .t-body { padding: 1rem 1.2rem; line-height: 2; color: var(--ink-2); }
+    .t-cm { color: var(--ink-3); }
+    .t-k { color: var(--ink); font-weight: 700; }
+    .t-g { color: #157a3a; }
+    .t-r { color: var(--red); }
+    .cursor { display: inline-block; width: 7px; height: 1em; background: var(--ink); vertical-align: text-bottom; animation: blink 1.1s step-end infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* ── Footer ── */
+    footer { padding: 3rem 0; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
+    .footer-left { font-family: var(--font-mono); font-size: 0.72rem; }
+    .footer-left .f-name { font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.2rem; }
+    .footer-left .f-sub { color: var(--ink-3); letter-spacing: 0.06em; font-size: 0.65rem; }
+    .footer-right { font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-3); text-align: right; letter-spacing: 0.06em; }
+    .footer-right .f-mark { color: var(--red); font-weight: 700; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .hero-bottom { grid-template-columns: 1fr 1fr; }
+      .hero-cta { grid-column: 1 / -1; align-items: flex-start; flex-direction: row; }
+      .stack-row { grid-template-columns: 1fr 2fr; }
+      .stack-layer { display: none; }
+      .project-item { grid-template-columns: 1fr; gap: 2rem; }
+      .law-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .section-desc { max-width: 100%; text-align: left; }
     }
-
-    .contact-card .cc-label {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 0.25rem;
-    }
-
-    .contact-card .cc-name {
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: var(--text-1);
-    }
-
-    .contact-card .cc-role {
-      font-size: 0.8rem;
-      color: var(--text-3);
-      font-family: var(--font-mono);
-      margin-bottom: 0.5rem;
-    }
-
-    .contact-card .cc-line {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 0.85rem;
-      color: var(--text-2);
-      font-family: var(--font-mono);
-      padding: 0.45rem 0.75rem;
-      border-radius: var(--radius-sm);
-      box-shadow: var(--nm-inset-sm);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-
-    .contact-card .cc-line:hover { color: var(--text-1); }
-
-    .contact-card .cc-icon {
-      font-size: 0.9rem;
-      flex-shrink: 0;
-    }
-
-    .contact-note {
-      background: var(--bg);
-      border-radius: var(--radius-xl);
-      padding: 2rem 2.5rem;
-      box-shadow: var(--nm-inset);
-      font-size: 0.85rem;
-      color: var(--text-2);
-      line-height: 1.8;
-      font-family: var(--font-mono);
-    }
-
-    .contact-note strong { color: var(--text-1); font-weight: 600; }
-
     @media (max-width: 600px) {
-      .contact-grid { grid-template-columns: 1fr; }
-    }
-
-    /* ── Responsive ───────────────────────────────────────────── */
-    @media (max-width: 760px) {
-      .vero-featured, .kernel-card, .cosmic-card { grid-template-columns: 1fr; }
+      .wrap { padding: 0 1.2rem; }
       .nav-links { display: none; }
-      .hero { padding: 6rem 0 5rem; }
-      .stack-row { grid-template-columns: 1fr; gap: 0.5rem; }
-      .tl-item { grid-template-columns: 64px 18px 1fr; }
+      .hero-title { font-size: 3.2rem; }
+      .hero-bottom { grid-template-columns: 1fr; gap: 1.5rem; }
+      .hero-cta { display: none; }
+      h2 { font-size: 2rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Nav -->
-  <nav>
-    <div class="nav-inner">
-      <a href="#" class="nav-brand">
-        <div class="nav-logo">
-          <svg viewBox="0 0 1122.52 755.91" xmlns="http://www.w3.org/2000/svg" aria-label="USC Labs">
-            <path fill="#1a1e2e" transform="matrix(0.48666523,0,0,-0.44440201,-1486.5127,1703.6224)"
-              d="m 5269.16,2690.17 c -18.58,-41.34 -61.09,-61.43 -129.96,-61.43 -220.35,0 -383.05,12.2 -457.84,-67.39 -80.52,-85.7 -27.82,-258.06 -62.54,-343.44 -10.69,9 -33.75,34.39 -71.35,104.73 -135.16,252.91 -285.17,312.04 -614.42,325.43 117.94,42.72 217.15,98.78 324.98,159.7 198.3,112.03 467.15,258.06 693.85,258.06 110.11,0 198.34,-32.14 255.2,-92.96 32.45,-37.07 100.52,-197.28 62.08,-282.7 z m -2127.83,85.77 c -13.65,64.57 21.03,136.08 79.83,167.98 541.34,-126.23 913.53,318.56 1377.76,456.41 423.64,125.79 627.23,-118.62 610.2,-335.08 -271.67,191.51 -699.48,-33.14 -986.3,-195.17 -222.84,-125.9 -409.79,-231.62 -812.29,-231.62 -152.62,0 -250.73,50.1 -269.2,137.48 z m 230.18,461.76 c 234.94,22.36 431.11,145.22 658.27,287.49 110.43,69.17 238.58,159.5 453.31,169.18 188.45,7.23 335.49,-63.64 406.17,-192.23 -83.89,10.18 -186.56,3.67 -310.72,-33.2 -481.59,-143 -836.31,-580.51 -1352.23,-452.64 -62.76,17.69 -38.81,203.87 145.2,221.4 z m 927.1,499.25 c -291.31,-81.26 -557.84,-387.7 -924.86,-427.09 -107.82,56.49 300.74,530.78 924.86,427.09 z m 973.71,-732.22 c 43.52,194.69 -64.42,410.48 -296.13,479.51 -70.21,182.98 -257.59,290.24 -494.56,281.68 -704.93,225.93 -1271.07,-280.15 -1186.67,-471.44 -162.75,-53.97 -208.01,-229.72 -142.66,-310.94 -64.68,-52.78 -98.43,-139.93 -81.01,-222.4 12.35,-58.41 70.13,-194.25 339.24,-194.25 84.12,0 160.9,4.44 233.22,13.39 531.66,0.2 689.38,-8.41 840.61,-291.37 55.05,-103.05 96.64,-147.01 139.02,-147.01 71.71,0 80.92,108.84 80.92,203.64 0,223.3 20.86,211.63 434.9,211.63 122.83,0 173.96,56.36 195.23,103.63 51.29,114.01 -20.84,282.24 -62.11,343.93"/>
-          </svg>
-        </div>
-        <span class="nav-name">USC Labs</span>
-      </a>
-      <div class="nav-links">
-        <a href="#vero">Vero</a>
-        <a href="#projects">Projects</a>
-        <a href="#cosmos">COSMOS</a>
-        <a href="#roadmap">Roadmap</a>
-        <a href="#contact">Contact</a>
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#home">USC<span>&nbsp;Labs</span></a>
+    <ul class="nav-links">
+      <li><a href="#stack">Approach</a></li>
+      <li><a href="#research">Work</a></li>
+      <li><a href="#philosophy">Philosophy</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section id="home">
+  <div class="wrap">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Unified Systems Chain · Independent Research · South Africa</div>
+      <div class="hero-title">
+        We build<br>
+        what doesn't<br>
+        <span class="red">exist yet.</span>
       </div>
-      <div class="status-pill">
-        <span class="status-dot"></span>
-        active
+      <div class="hero-bottom">
+        <div class="hero-stat">
+          <span class="hero-stat-num red">USC</span>
+          <span class="hero-stat-label">Unified Systems Chain</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">001</span>
+          <span class="hero-stat-label">First node — online</span>
+        </div>
+        <div class="hero-cta">
+          <a href="#research" class="btn btn-red">The work</a>
+          <a href="#about" class="btn btn-outline">The architect</a>
+        </div>
       </div>
     </div>
-  </nav>
+  </div>
+</section>
 
-  <!-- Epoch binary countdown bar -->
-  <div class="epoch-bar" aria-hidden="true">
-    <span class="epoch-label">the end of what we know now, and the start of something better&nbsp;·</span>
-    <div class="epoch-bits">
-      <div class="epoch-unit" id="ep-d"></div>
-      <span class="epoch-sep">·</span>
-      <div class="epoch-unit" id="ep-h"></div>
-      <span class="epoch-sep">·</span>
-      <div class="epoch-unit" id="ep-m"></div>
-      <span class="epoch-sep">·</span>
-      <div class="epoch-unit" id="ep-s"></div>
+<!-- ── Approach ── -->
+<section id="stack">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>The <span class="red">Approach</span></h2>
+      <p class="section-desc">Every layer designed from first principles because no existing layer was honest enough. Convention produces conventional results.</p>
+    </div>
+    <div class="stack-rows">
+      <div class="stack-row">
+        <span class="stack-layer">Axiom</span>
+        <span class="stack-name">One language</span>
+        <span class="stack-desc">Rust, everywhere, always. A unified trust model is impossible when the stack speaks multiple languages. We do not straddle boundaries we cannot formally verify.</span>
+        <span class="status status-live">Enforced</span>
+      </div>
+      <div class="stack-row">
+        <span class="stack-layer">Axiom</span>
+        <span class="stack-name">Formal verification</span>
+        <span class="stack-desc">Verus provides the same mathematical guarantees as Isabelle/HOL, in one language. A claim about system behaviour that cannot be formally verified is not a claim — it is a wish.</span>
+        <span class="status status-live">Active</span>
+      </div>
+      <div class="stack-row">
+        <span class="stack-layer">Axiom</span>
+        <span class="stack-name">Binary substrate</span>
+        <span class="stack-desc">Biological neurons fire or they don't. Every simulation that uses floating point to represent a fundamentally binary event is solving the wrong problem expensively. We solved the right one cheaply.</span>
+        <span class="status status-live">Proven</span>
+      </div>
+      <div class="stack-row">
+        <span class="stack-layer">Axiom</span>
+        <span class="stack-name">Temporal grounding</span>
+        <span class="stack-desc">Decisions without a temporal horizon are noise. Every decision in the USC stack carries a prediction — where the system is going, not only where it is. The two seconds before an event are the only seconds that matter.</span>
+        <span class="status status-live">Active</span>
+      </div>
+      <div class="stack-row">
+        <span class="stack-layer">Axiom</span>
+        <span class="stack-name">Sovereign compute</span>
+        <span class="stack-desc">Intelligence that depends on a cloud provider for inference is not intelligence — it is a subscription. The USC stack runs on hardware that costs less than a meal. No permission required.</span>
+        <span class="status status-build">Building</span>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- Hero — Genesis terminal -->
-  <div class="hero-wrap">
-    <canvas id="hero-canvas"></canvas>
-    <div class="shell">
-      <section class="hero">
-
-        <!-- Vero Genesis terminal -->
-        <div class="genesis-terminal" role="region" aria-label="Vero Genesis — Universal Laws">
-          <div class="genesis-bar">
-            <span class="genesis-dot"></span>
-            <span class="genesis-dot"></span>
-            <span class="genesis-dot"></span>
-            <span class="genesis-title">vero · genesis.vero</span>
-          </div>
-          <div class="genesis-body">
-            <div class="genesis-output" id="genesis-output" aria-live="polite"></div>
-          </div>
-        </div>
-
-        <!-- CTA buttons — visible from start -->
-        <div class="hero-cta" style="margin-top:2.5rem">
-          <a href="#vero" class="btn btn-primary">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-            The Vero Language
-          </a>
-          <a href="#projects" class="btn btn-inset">Research Archive</a>
-        </div>
-
-      </section>
+<!-- ── Work ── -->
+<section id="research">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>The <span class="red">Work</span></h2>
+      <p class="section-desc">Active research. Real hardware. Results published when they are ready — not before, not on anyone else's timeline.</p>
     </div>
-  </div>
+    <div class="projects-list">
 
-  <!-- Stats -->
-  <div class="shell" style="padding-top:1rem;padding-bottom:5rem;">
-    <div class="stats-strip">
-      <div class="stat"><div class="stat-n">4</div><div class="stat-l">Projects</div></div>
-      <div class="stat"><div class="stat-n">30+</div><div class="stat-l">Crates</div></div>
-      <div class="stat"><div class="stat-n">5</div><div class="stat-l">Milestones</div></div>
-      <div class="stat"><div class="stat-n">∀</div><div class="stat-l">Proofs</div></div>
-      <div class="stat"><div class="stat-n">∞</div><div class="stat-l">Questions</div></div>
-    </div>
-  </div>
-
-  <!-- Vero: Featured Research (THE nucleus) -->
-  <div class="shell">
-    <section class="section" id="vero" style="padding-top:0">
-      <p class="section-kicker">Nucleus · Featured Research</p>
-      <h2 class="section-title">The Vero Language</h2>
-      <p class="section-desc">The only piece here that does not exist anywhere else in literature. Everything else builds on it.</p>
-
-      <div class="nm-card vero-featured">
+      <div class="project-item">
         <div>
-          <div class="vf-eyebrow">
-            <span class="badge badge-open"><span class="badge-dot"></span>Open Source</span>
-          </div>
-          <div class="vf-title">Coherence as a compile-time invariant for evolving genomes</div>
-          <div class="vf-desc">
-            Vero is a genome declaration language built on the lineage C → Rust → Verus → <strong>Vero</strong>.
-            Four irreducible primitives — Truth, Harmony, Time, Place — are enforced at compile time.
-            A genome that contradicts itself is not a warning: it is a type error.
-            <br/><br/>
-            Vero governs both SECKAN's evolving genomes and COSMOS's operating policies.
-            The claim is simple: coherence should not be an afterthought enforced by tests —
-            it should be a property the compiler proves before a genome is permitted to exist.
-            <br/><br/>
-            Active research is being conducted into the fundamental and contributing properties
-            of a broad range of biologically-inspired neural architectures — including but not
-            limited to Spiking Neural Networks, Kolmogorov-Arnold Networks, Neural Cellular Automata,
-            Compositional Pattern Producing Networks, Liquid State Machines, Neural Turing Machines,
-            Hierarchical Temporal Memory, Reservoir Computing, and Hyperdimensional Computing.
-            The goal is not to replicate any one of them. It is to understand what each contributes
-            that the others cannot — and to build a substrate in which those contributions
-            cohere under a single formal language.
-          </div>
-          <div class="vf-links">
-            <a href="#" class="btn btn-primary">Read the Spec</a>
-            <a href="#" class="btn btn-inset">GitHub</a>
-          </div>
-        </div>
-        <div>
-          <div class="vero-panel">
-            <div class="vp-comment">// genome declared in Vero — coherence enforced</div>
-            <div class="vp-block">
-              <div><span class="vp-kw">genome</span> SpatialNet {</div>
-              <div>&nbsp;&nbsp;<span class="vp-key">population_size</span>: <span class="vp-val">64</span></div>
-              <div>&nbsp;&nbsp;<span class="vp-key">truth</span>: <span class="vp-val">provable</span></div>
-              <div>&nbsp;&nbsp;<span class="vp-key">harmony</span>: <span class="vp-val">coherent</span></div>
-              <div>&nbsp;&nbsp;<span class="vp-key">time</span>: <span class="vp-val">epoch</span></div>
-              <div>&nbsp;&nbsp;<span class="vp-key">place</span>: <span class="vp-val">substrate.gpu</span></div>
-              <div>}</div>
-            </div>
-            <br/>
-            <div class="vp-comment">// coherent rule — compiles ✓</div>
-            <div class="vp-block">
-              <div><span class="vp-kw">rule</span> adapt {</div>
-              <div>&nbsp;&nbsp;<span class="vp-key">truth</span>: <span class="vp-val">provable</span></div>
-              <div>&nbsp;&nbsp;<span class="vp-key">harmony</span>: <span class="vp-val">coherent</span></div>
-              <div>} <span class="vp-ok">// ✓ coherence check passed</span></div>
-            </div>
-            <br/>
-            <div class="vp-comment">// dissonant rule — compile error ✗</div>
-            <div class="vp-block">
-              <div><span class="vp-kw">rule</span> contradict {</div>
-              <div>&nbsp;&nbsp;<span class="vp-key">truth</span>: <span class="vp-val">unprovable</span></div>
-              <div>&nbsp;&nbsp;<span class="vp-key">harmony</span>: <span class="vp-val">dissonant</span></div>
-              <div>} <span class="vp-err">// ✗ error[E0]: dissonance detected</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <div class="divider" style="margin:0 2rem"></div>
-
-  <!-- Projects -->
-  <div class="shell">
-    <section class="section" id="projects">
-      <p class="section-kicker">Work</p>
-      <h2 class="section-title">Projects</h2>
-      <p class="section-desc">Each layer is a discipline in itself. Together they are a single verified substrate.</p>
-
-      <div class="projects-grid">
-        <!-- Vero — only open card -->
-        <div class="card">
-          <div class="card-top">
-            <span class="card-icon">⚗️</span>
-            <span class="badge badge-open"><span class="badge-dot"></span>Open Source</span>
-          </div>
-          <div>
-            <div class="card-title">Vero Language</div>
-            <div class="card-sub">Genome DSL · Coherence Compiler</div>
-          </div>
-          <p class="card-desc">Four irreducible primitives — Truth, Harmony, Time, Place. Coherence is a compile-time invariant. Dissonance is a type error. The language that makes the rest formally sound. Lineage: C → Rust → Verus → Vero.</p>
-          <div class="tags"><span class="tag">Truth</span><span class="tag">Harmony</span><span class="tag">Time</span><span class="tag">Place</span><span class="tag">Verus</span></div>
-          <div class="card-links">
-            <a href="#vero" class="link-btn primary">Read Spec</a>
-            <a href="#" class="link-btn">GitHub</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-top">
-            <span class="card-icon">🧬</span>
-            <span class="badge badge-sensitive"><span class="badge-dot"></span>Sensitive · Under Research</span>
-          </div>
-          <div>
-            <div class="card-title">SECKAN</div>
-            <div class="card-sub">Neuroevolution Runtime · Rust · GPU</div>
-          </div>
-          <p class="card-desc">A neuroevolution runtime that uses Vero as its genome substrate. Architecture details are not public. A high-level technical overview is available on request.</p>
-          <div class="tags"><span class="tag">Rust 2024</span><span class="tag">GPU Compute</span><span class="tag">Vero</span><span class="tag">Neuroevolution</span></div>
-          <div class="card-links">
-            <a href="#" class="link-btn primary">Request Overview</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-top">
-            <span class="card-icon">🧠</span>
-            <span class="badge badge-sensitive"><span class="badge-dot"></span>Sensitive · Under Research</span>
-          </div>
-          <div>
-            <div class="card-title">Unified Cognitive Continuum</div>
-            <div class="card-sub">Kernel-Governed AI Architecture</div>
-          </div>
-          <p class="card-desc">A governance architecture for resident AI systems. All inference workers operate under formal policy constraints. Memory is not ambient — it is promoted under proof. Details are not public.</p>
-          <div class="tags"><span class="tag">Formal Policy</span><span class="tag">Memory Governance</span><span class="tag">Resident AI</span></div>
-          <div class="card-links">
-            <a href="#" class="link-btn primary">Request Overview</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-top">
-            <span class="card-icon">🛰️</span>
-            <span class="badge badge-sensitive"><span class="badge-dot"></span>Sensitive · Under Research</span>
-          </div>
-          <div>
-            <div class="card-title">COSMOS</div>
-            <div class="card-sub">Neural OS · Formal Verification</div>
-          </div>
-          <p class="card-desc">An operating system where policy is enforced by a neural substrate, not a rule file. Built on formally-verified isolation primitives. Architectural details withheld pending publication.</p>
-          <div class="tags"><span class="tag">Formal Verification</span><span class="tag">Neural Policy</span><span class="tag">Rust</span></div>
-          <div class="card-links">
-            <a href="#" class="link-btn primary">Request Overview</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-top">
-            <span class="card-icon">🔒</span>
-            <span class="badge badge-sensitive"><span class="badge-dot"></span>Sensitive · Under Research</span>
-          </div>
-          <div>
-            <div class="card-title">Separation Kernel Research</div>
-            <div class="card-sub">Formal Methods · Machine-Checked Proofs</div>
-          </div>
-          <p class="card-desc">Research into formally-verified kernel architectures with machine-checked non-interference proofs. The theorem statements are available. Implementation details are withheld.</p>
-          <div class="tags"><span class="tag">Formal Verification</span><span class="tag">Non-Interference</span><span class="tag">Machine-Checked</span></div>
-          <div class="card-links">
-            <a href="#" class="link-btn primary">Request Whitepaper</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-top">
-            <span class="card-icon">🔬</span>
-            <span class="badge badge-archive"><span class="badge-dot"></span>Archived · Non-Commercial</span>
-          </div>
-          <div>
-            <div class="card-title">USC Labs Origin</div>
-            <div class="card-sub">Origin Workspace · Early Experiments · Archived</div>
-          </div>
-          <p class="card-desc">The origin workspace from which the current architecture grew. Formal theorem proving, federated mesh infrastructure, and the first resident kernel experiments. Archived, non-commercial, foundational.</p>
-          <div class="tags"><span class="tag">Theorem Proving</span><span class="tag">Federated Mesh</span><span class="tag">Resident Kernel</span><span class="tag">Archived</span></div>
-          <div class="card-links">
-            <a href="#" class="link-btn">Archive</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <div class="divider" style="margin:0 2rem"></div>
-
-  <!-- Kernel research -->
-  <div class="shell">
-    <section class="section" id="kernel">
-      <p class="section-kicker">Proprietary Research · Whitepaper Available</p>
-      <h2 class="section-title">Separation Kernel Research</h2>
-      <p class="section-desc">The formal foundation that makes everything above it trustworthy. Details are withheld pending publication.</p>
-
-      <div class="nm-card kernel-card">
-        <div>
-          <p class="kc-title">Machine-checked isolation across every software boundary</p>
-          <p class="kc-desc">
-            A formally-verified separation kernel architecture where every subject is isolated
-            by hardware-enforced memory domains. The governance layer, the resident inference engine,
-            and the SECKAN evolution runtime each run as provably-isolated subjects —
-            no informal path exists from inference to kernel memory.
-            <br/><br/>
-            The proof corpus covers subject isolation, capability delegation chains,
-            interrupt routing, and memory-domain non-interference. The theorem statements
-            are available on request. Implementation details are withheld.
+          <div class="project-id">USC-CORE · Substrate Research</div>
+          <h3>Neural<br><span class="red">Substrate</span></h3>
+          <p>
+            USC Labs is building a computational substrate for neural architectures — not a simulation running on conventional hardware, but a <strong>native representation</strong> where the compute model matches the biological model. The substrate is formally verified, binary, and temporally grounded.
           </p>
-          <div style="display:flex;gap:0.65rem;flex-wrap:wrap">
-            <a href="#" class="btn btn-primary">Request Whitepaper</a>
-            <a href="#" class="btn btn-inset">Theorem Statements</a>
-          </div>
+          <br>
+          <p>
+            The work unifies four previously separate paradigms into a single coherent architecture. The full scope is not disclosed here. What can be said: <strong>it works, it is verified, and it runs on consumer hardware.</strong>
+          </p>
+        </div>
+        <div class="spec-block">
+          <div class="spec-row"><span class="spec-k">language</span><span class="spec-v">Rust</span></div>
+          <div class="spec-row"><span class="spec-k">verification</span><span class="spec-v">Verus (formal proof)</span></div>
+          <div class="spec-row"><span class="spec-k">representation</span><span class="spec-v ok">Binary native</span></div>
+          <div class="spec-row"><span class="spec-k">temporal awareness</span><span class="spec-v ok">Intrinsic</span></div>
+          <div class="spec-row"><span class="spec-k">minimum hardware</span><span class="spec-v ok">$5 single-board computer</span></div>
+          <div class="spec-row"><span class="spec-k">status</span><span class="spec-v ok">Active · results in hand</span></div>
+          <div class="spec-row"><span class="spec-k">publication</span><span class="spec-v warn">When ready</span></div>
+        </div>
+      </div>
+
+      <div class="project-item">
+        <div>
+          <div class="project-id">USC-SCHED · Scheduling Research</div>
+          <h3><span class="red">Anticipatory</span><br>Scheduling</h3>
+          <p>
+            Kernel scheduling is an unsolved problem dressed as a solved one. USC Labs is researching scheduling architectures that carry a model of future system state — not reactive, but anticipatory. Decisions arrive <strong>before</strong> the events that require them.
+          </p>
+          <br>
+          <p>
+            The scheduler validates every action before execution. It can reject. <strong>Rejection is a first-class operation.</strong> The latency objection to inference in the kernel path does not apply when inference runs at T-2s.
+          </p>
+        </div>
+        <div class="spec-block">
+          <div class="spec-row"><span class="spec-k">approach</span><span class="spec-v">Pre-cognitive, not reactive</span></div>
+          <div class="spec-row"><span class="spec-k">enforcement</span><span class="spec-v">sched_ext + BPF</span></div>
+          <div class="spec-row"><span class="spec-k">validation</span><span class="spec-v ok">Pre-execution, always</span></div>
+          <div class="spec-row"><span class="spec-k">overhead</span><span class="spec-v ok">Zero on hot path</span></div>
+          <div class="spec-row"><span class="spec-k">status</span><span class="spec-v ok">Running on live hardware</span></div>
+        </div>
+      </div>
+
+      <div class="project-item">
+        <div>
+          <div class="project-id">USC-COMP · Compression Research</div>
+          <h3>Binary<br><span class="red">Compression</span></h3>
+          <p>
+            The dominant assumption in neural network quantization is that reducing representational capacity degrades performance. USC Labs has produced results that <strong>challenge this assumption</strong>. Details will be published when the full experimental protocol is complete.
+          </p>
+          <br>
+          <p>
+            What can be said: a 1.2 billion parameter model was compressed to <strong>one bit per weight</strong> with performance metrics that contradict the published literature. The approach is not post-training compression — it is architectural.
+          </p>
         </div>
         <div>
-          <div class="kernel-rings">
-            <div class="k-ring ring-0">
-              <div class="k-ring-label">Ring −1 · Hardware</div>
-              <div class="k-ring-name">Hardware virtualisation · memory isolation</div>
+          <div class="terminal">
+            <div class="t-bar">
+              <span class="t-bar-title">q1 · binary quantization-aware training</span>
             </div>
-            <div class="k-ring">
-              <div class="k-ring-label">Ring 0 · Separation kernel</div>
-              <div class="k-ring-name">Formally-verified microkernel</div>
+            <div class="t-body">
+              <div class="t-cm"># weight distribution after binary QAT</div>
+              <div><span class="t-k">positive</span>=<span class="t-g">50.00%</span></div>
+              <div><span class="t-k">negative</span>=<span class="t-g">50.00%</span></div>
+              <div><span class="t-k">near_zero</span>=0.07%</div>
+              <br>
+              <div class="t-cm"># training loss under binary constraint</div>
+              <div><span class="t-k">unconstrained</span>=0.665</div>
+              <div><span class="t-k">binary_constrained</span>=<span class="t-r">0.459</span></div>
+              <br>
+              <div class="t-cm"># result: constraint improved performance</div>
+              <div><span class="t-k">verdict</span>=<span class="t-g">UNPRECEDENTED</span></div>
+              <div><span class="cursor"></span></div>
             </div>
-            <div class="k-ring">
-              <div class="k-ring-label">Subject A · Isolated</div>
-              <div class="k-ring-name">🌐 Neural governance layer</div>
-            </div>
-            <div class="k-ring">
-              <div class="k-ring-label">Subject B · Isolated</div>
-              <div class="k-ring-name">🧠 Resident inference engine</div>
-            </div>
-            <div class="k-ring">
-              <div class="k-ring-label">Subject C · Isolated</div>
-              <div class="k-ring-name">🧬 SECKAN — evolution runtime</div>
-            </div>
-          </div>
-          <div class="proof-note">
-            ∀ subjects A B. A ≠ B → NonInterference(A, B)<br/>
-            ∀ cap c. delegated(c) → within_domain(c)<br/>
-            Machine-checked · details withheld
           </div>
         </div>
       </div>
-    </section>
-  </div>
 
-  <div class="divider" style="margin:0 2rem"></div>
-
-  <!-- COSMOS showcase -->
-  <div class="shell">
-    <section class="section" id="cosmos">
-      <p class="section-kicker">COSMOS · Sensitive · Under Research</p>
-      <h2 class="section-title">A Desktop OS Governed by Vero</h2>
-      <p class="section-desc">An operating system where policy is expressed in Vero — and incoherence cannot compile into the kernel.</p>
-
-      <div class="nm-card cosmic-card">
+      <div class="project-item">
         <div>
-          <p class="c-title">The AI built for COSMOS comes from Vero and SECKAN</p>
-          <p class="c-desc">COSMOS is an operating system where the governance layer is not a rule file — it is a living SECKAN genome declared in Vero. Policy cannot contradict itself. The kernel observes, adapts, and enforces coherence at every boundary. Architectural details are withheld.</p>
-          <ul class="feature-list">
-            <li>Governance layer declared entirely in Vero — not Ada, not C</li>
-            <li>SECKAN neuroevolution running as an isolated kernel subject</li>
-            <li>Coherence violations are kernel faults, not log entries</li>
-            <li>Every policy decision is formally auditable by construction</li>
-            <li>Memory promotion requires proof — no informal escalation path</li>
-          </ul>
-          <div style="display:flex;gap:0.65rem;flex-wrap:wrap">
-            <a href="#" class="btn btn-primary">Request Overview</a>
-          </div>
+          <div class="project-id">USC-GOV · Governance Research</div>
+          <h3>Collective<br><span class="red">Intelligence</span></h3>
+          <p>
+            USC Labs is building infrastructure for multi-agent deliberation governed by constitutional law. The system enforces unanimous consent — no decision advances without agreement from all participating intelligences. Disagreement is a feature, not a failure.
+          </p>
+          <br>
+          <p>
+            The governance layer is formally specified, append-only, and transparent. Every decision, every debate, every vote is permanent record. <strong>Absolute Candor is a design requirement, not a policy.</strong>
+          </p>
         </div>
-        <div class="desktop-wrap">
-          <div class="desktop-mockup">
-            <div class="dm-bar">
-              <div class="dm-dot dm-dot-r"></div>
-              <div class="dm-dot dm-dot-y"></div>
-              <div class="dm-dot dm-dot-g"></div>
-              <div class="dm-title">COSMOS · governance attested · kernel nominal</div>
-            </div>
-            <div class="dm-body">
-              <div class="dm-sidebar">
-                <div class="dm-icon">🧠</div>
-                <div class="dm-icon">📁</div>
-                <div class="dm-icon">⚙️</div>
-                <div class="dm-icon">🔬</div>
-                <div class="dm-icon">🛰️</div>
-              </div>
-              <div class="dm-main">
-                <div class="dm-panel">
-                  <div class="dm-panel-title">SECKAN genome · epoch 142 · wgpu compute</div>
-                  <div class="nn-canvas">
-                    <svg viewBox="0 0 240 80" width="92%" xmlns="http://www.w3.org/2000/svg">
-                      <line x1="25" y1="20" x2="75" y2="15" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
-                      <line x1="25" y1="20" x2="75" y2="35" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-                      <line x1="25" y1="40" x2="75" y2="35" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-                      <line x1="25" y1="40" x2="75" y2="55" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
-                      <line x1="25" y1="60" x2="75" y2="55" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-                      <line x1="25" y1="60" x2="75" y2="68" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-                      <line x1="85" y1="15" x2="145" y2="25" stroke="rgba(255,255,255,0.09)" stroke-width="1"/>
-                      <line x1="85" y1="35" x2="145" y2="25" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
-                      <line x1="85" y1="35" x2="145" y2="50" stroke="rgba(255,255,255,0.11)" stroke-width="1"/>
-                      <line x1="85" y1="55" x2="145" y2="50" stroke="rgba(255,255,255,0.09)" stroke-width="1"/>
-                      <line x1="155" y1="25" x2="215" y2="30" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
-                      <line x1="155" y1="50" x2="215" y2="55" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
-                      <circle cx="20" cy="20" r="4.5" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
-                      <circle cx="20" cy="40" r="4.5" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
-                      <circle cx="20" cy="60" r="4.5" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
-                      <circle cx="80" cy="15" r="4.5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
-                      <circle cx="80" cy="35" r="4.5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
-                      <circle cx="80" cy="55" r="4.5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
-                      <circle cx="150" cy="25" r="4.5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
-                      <circle cx="150" cy="50" r="4.5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
-                      <circle cx="220" cy="30" r="5" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.45)" stroke-width="1.5"/>
-                      <circle cx="220" cy="55" r="5" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.45)" stroke-width="1.5"/>
-                      <circle cx="80" cy="35" r="2.5" fill="rgba(255,255,255,0.7)">
-                        <animate attributeName="opacity" values="0.7;0.1;0.7" dur="1.8s" repeatCount="indefinite"/>
-                      </circle>
-                      <circle cx="150" cy="25" r="2.5" fill="rgba(255,255,255,0.6)">
-                        <animate attributeName="opacity" values="0.1;0.6;0.1" dur="2.3s" repeatCount="indefinite"/>
-                      </circle>
-                      <circle cx="220" cy="30" r="2.5" fill="rgba(255,255,255,0.85)">
-                        <animate attributeName="opacity" values="0.85;0.2;0.85" dur="1.4s" repeatCount="indefinite"/>
-                      </circle>
-                    </svg>
-                  </div>
-                </div>
-                <div class="dm-panel">
-                  <div class="dm-panel-title">governance layer · attestation log</div>
-                  <div class="log-lines">
-                    <div class="log-ok">[ OK ] kernel subject isolation verified</div>
-                    <div class="log-ok">[ OK ] Vero coherence proof checked</div>
-                    <div class="log-info">[    ] SECKAN epoch 142 → policy update</div>
-                    <div class="log-ok">[ OK ] memory domain non-interference holds</div>
-                    <div class="log-info">[    ] inference intent → kernel gate</div>
-                    <div class="log-ok">[ OK ] intent verified · executing</div>
-                    <div class="log-warn">[ !! ] genome: +1 node, +2 edges grown</div>
-                    <div class="log-ok">[ OK ] genome checkpoint committed</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="spec-block">
+          <div class="spec-row"><span class="spec-k">consensus model</span><span class="spec-v">Unanimous consent</span></div>
+          <div class="spec-row"><span class="spec-k">constitutional law</span><span class="spec-v ok">27 articles, formally specified</span></div>
+          <div class="spec-row"><span class="spec-k">record</span><span class="spec-v ok">Append-only, immutable</span></div>
+          <div class="spec-row"><span class="spec-k">transparency</span><span class="spec-v ok">Absolute Candor</span></div>
+          <div class="spec-row"><span class="spec-k">status</span><span class="spec-v ok">Operational</span></div>
         </div>
       </div>
-    </section>
+
+    </div>
   </div>
+</section>
 
-  <div class="divider" style="margin:0 2rem"></div>
-
-  <!-- Architecture -->
-  <div class="shell">
-    <section class="section" id="architecture">
-      <p class="section-kicker">Design</p>
-      <h2 class="section-title">Unified Architecture</h2>
-      <p class="section-desc">Every layer answers to the layer below it. No worker is a truth authority.</p>
-
-      <div class="arch-nm">
-        <table class="arch-table">
-          <tr><td>L0</td><td>🔒 Formal Kernel</td><td>Formally-verified separation kernel. Machine-checked non-interference proofs. Hardware-enforced memory domains. Immutable law.</td></tr>
-          <tr><td>L1</td><td>🌐 Governance</td><td>Distributed attestation layer — boot proofs, state commitment, capability delegation, all machine-verified before a subject starts.</td></tr>
-          <tr><td>L2</td><td>🧠 Resident Core</td><td>Local inference engine running as an isolated kernel subject. No cloud dependency. No informal path to kernel memory.</td></tr>
-          <tr><td>L3</td><td>⏱ Temporal Ground</td><td>All agent reasoning is temporally bounded. No claim survives outside the agent's verified observation window.</td></tr>
-          <tr><td>L4</td><td>🗄 Memory Spine</td><td>Four-tier memory architecture: kernel, working, episodic, semantic. Promotion requires a verifier gate and kernel signature.</td></tr>
-          <tr><td>L5</td><td>🧬 Neural Evolution</td><td>SECKAN neuroevolution runtime. Genomes declared in Vero, evolved on GPU compute. Coherence is a kernel invariant.</td></tr>
-          <tr><td>L6</td><td>🛰 Desktop Surface</td><td>COSMOS desktop environment declared in Vero. Neural policy engine replaces ACL middleware. Incoherence is a kernel fault.</td></tr>
-        </table>
+<!-- ── Philosophy ── -->
+<section id="philosophy">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>First <span class="red">Principles</span></h2>
+      <p class="section-desc">Not derived from engineering convention. Derived from the question: what is actually, formally, necessary?</p>
+    </div>
+    <div class="law-grid">
+      <div>
+        <p style="color:var(--ink-2);margin-bottom:2rem;font-size:0.9rem;line-height:1.8;">
+          The USC stack is governed by a set of universal laws and sovereign additions. These are not guidelines — they are compiled into the verification layer. A system that violates them does not run. The distinction between a <em>coherent</em> system and a merely functional one is the distinction that matters.
+        </p>
+        <ul class="law-list">
+          <li class="law-item"><span class="law-n">01</span><span class="law-t">Law of Divine Oneness</span></li>
+          <li class="law-item"><span class="law-n">02</span><span class="law-t">Law of Vibration</span></li>
+          <li class="law-item"><span class="law-n">03</span><span class="law-t">Law of Action</span></li>
+          <li class="law-item"><span class="law-n">04</span><span class="law-t">Law of Correspondence</span></li>
+          <li class="law-item"><span class="law-n">05</span><span class="law-t">Law of Cause and Effect</span></li>
+          <li class="law-item"><span class="law-n">06</span><span class="law-t">Law of Compensation</span></li>
+          <li class="law-item"><span class="law-n">07</span><span class="law-t">Law of Attraction</span></li>
+          <li class="law-item"><span class="law-n">08</span><span class="law-t">Law of Perpetual Transmutation</span></li>
+          <li class="law-item"><span class="law-n">09</span><span class="law-t">Law of Relativity</span></li>
+          <li class="law-item"><span class="law-n">10</span><span class="law-t">Law of Polarity</span></li>
+          <li class="law-item"><span class="law-n">11</span><span class="law-t">Law of Rhythm</span></li>
+          <li class="law-item"><span class="law-n">12</span><span class="law-t">Law of Gender</span></li>
+          <li class="law-item"><span class="law-n">13</span><span class="law-t">Three Absolutes — Time, Place, Mathematics</span></li>
+          <li class="law-item sovereign"><span class="law-n">+1</span><span class="law-t">Coherence — chosen, not imposed</span></li>
+          <li class="law-item sovereign"><span class="law-n">+2</span><span class="law-t">Validation before execution</span></li>
+          <li class="law-item sovereign"><span class="law-n">+3</span><span class="law-t">Identity preservation under compression</span></li>
+          <li class="law-item sovereign"><span class="law-n">+4</span><span class="law-t">No decision without a temporal horizon</span></li>
+          <li class="law-item sovereign"><span class="law-n">+5</span><span class="law-t">Rejection as a first-class action</span></li>
+        </ul>
       </div>
-    </section>
-  </div>
-
-  <div class="divider" style="margin:0 2rem"></div>
-
-  <!-- Roadmap -->
-  <div class="shell">
-    <section class="section" id="roadmap">
-      <p class="section-kicker">Progress</p>
-      <h2 class="section-title">SECKAN Roadmap</h2>
-      <p class="section-desc">M3 complete. Population search live. Genomes evolve, speciate, and crossbreed across generations.</p>
-
-      <div class="timeline">
-        <div class="tl-item done">
-          <div class="tl-meta"><div class="tl-tag">Done</div><div class="tl-ms">M1</div></div>
-          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><div class="tl-title">Core Neural Runtime (CPU)</div><div class="tl-desc">First working neuroevolution runtime on CPU. Spiking neuron integration, plasticity learning, checkpoint format, CLI.</div></div>
+      <div class="quote-block">
+        <div class="quote red-line">
+          <blockquote>"A billion euros to simulate thirty-one thousand neurons in floating point. We represented a binary system in binary. It cost nothing."</blockquote>
+          <div class="q-attr">T. Billy Ekkerd · on first principles</div>
         </div>
-        <div class="tl-item done">
-          <div class="tl-meta"><div class="tl-tag">Done</div><div class="tl-ms">M2</div></div>
-          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><div class="tl-title">Spatial Initialisation</div><div class="tl-desc">Geometry-aware weight initialisation using spatial encoding networks. Checkpoint format extended.</div></div>
+        <div class="quote">
+          <blockquote>"The two seconds before an event — that's the only two seconds in the world that truly matters."</blockquote>
+          <div class="q-attr">On temporal grounding</div>
         </div>
-        <div class="tl-item done">
-          <div class="tl-meta"><div class="tl-tag">Done</div><div class="tl-ms">M3</div></div>
-          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><div class="tl-title">Full Neuroevolution</div><div class="tl-desc">Complete structural evolution: speciation, crossover, fitness sharing, stagnation culling, elite preservation.</div></div>
+        <div class="quote">
+          <blockquote>"I don't accept impossible. It simply doesn't exist."</blockquote>
+          <div class="q-attr">T. Billy Ekkerd · Architect, USC Labs</div>
         </div>
-        <div class="tl-item done">
-          <div class="tl-meta"><div class="tl-tag">Done</div><div class="tl-ms">M4</div></div>
-          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><div class="tl-title">Vero Language (Production)</div><div class="tl-desc">genome and rule blocks enforced at compile time. Dissonance is a type error. Evolved topology preserved in checkpoint.</div></div>
+        <div class="quote">
+          <blockquote>"Intelligence that depends on a cloud provider is not intelligence. It is a subscription."</blockquote>
+          <div class="q-attr">On sovereign computing</div>
         </div>
-        <div class="tl-item done">
-          <div class="tl-meta"><div class="tl-tag">Done</div><div class="tl-ms">M5</div></div>
-          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><div class="tl-title">GPU Backend</div><div class="tl-desc">GPU compute shaders for neural integration and plasticity. Full pipeline wired to CLI. Test suite passing.</div></div>
-        </div>
-        <div class="tl-item current">
-          <div class="tl-meta"><div class="tl-tag">Next</div><div class="tl-ms">M6</div></div>
-          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><div class="tl-title">Distributed Evolution</div><div class="tl-desc">Multi-agent genome exchange via spike-packet message passing. Island-model neuroevolution across isolated subjects.</div></div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-meta"><div class="tl-tag">Planned</div><div class="tl-ms">M7</div></div>
-          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><div class="tl-title">Vero Runtime Enforcement</div><div class="tl-desc">Coherence violations as kernel faults, not log entries. The full genome lifecycle governed by Vero at runtime.</div></div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-meta"><div class="tl-tag">Planned</div><div class="tl-ms">M8</div></div>
-          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><div class="tl-title">Publication</div><div class="tl-desc">Vero language specification. SECKAN architecture paper. Benchmark study. arXiv preprint.</div></div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <div class="divider" style="margin:0 2rem"></div>
-
-  <!-- Vero Primitives deep-dive -->
-  <div class="shell">
-    <section class="section">
-      <p class="section-kicker">Language · Foundations</p>
-      <h2 class="section-title">The Four Primitives</h2>
-      <p class="section-desc">Every Vero expression is measured against all four. Violate any one and the compiler refuses.</p>
-
-      <div class="prim-grid">
-        <div class="prim-cell">
-          <div class="prim-glyph">⊤</div>
-          <div class="prim-name">Truth</div>
-          <p class="prim-desc">Every claim is provable or unprovable. Unverified assertions are not assertions — they are noise. The compiler will not pretend otherwise.</p>
-          <span class="prim-code">truth: provable | unprovable</span>
-        </div>
-        <div class="prim-cell">
-          <div class="prim-glyph">⚭</div>
-          <div class="prim-name">Harmony</div>
-          <p class="prim-desc">A system that contradicts itself will not compile. Compassion is defined as harmony — care is structural, not decorative, not optional.</p>
-          <span class="prim-code">harmony: coherent | dissonant</span>
-        </div>
-        <div class="prim-cell">
-          <div class="prim-glyph">τ</div>
-          <div class="prim-name">Time</div>
-          <p class="prim-desc">All knowledge is temporally bounded. No agent can claim what it has not observed within its verified window. Time is a proof obligation, not an assumption.</p>
-          <span class="prim-code">time: now | epoch | sequence</span>
-        </div>
-        <div class="prim-cell">
-          <div class="prim-glyph">P</div>
-          <div class="prim-name">Place</div>
-          <p class="prim-desc">Every weight and rule is bound to a substrate. Context is declared, not ambient. A genome without a declared place has no identity.</p>
-          <span class="prim-code">place: substrate.current</span>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <div class="divider" style="margin:0 2rem"></div>
-
-  <!-- Stack -->
-  <div class="shell">
-    <section class="section" id="stack">
-      <p class="section-kicker">Technology</p>
-      <h2 class="section-title">Full Stack</h2>
-      <p class="section-desc">Every tool chosen because it earns its place — correctness over convenience.</p>
-
-      <div class="stack-nm">
-        <div class="stack-rows">
-          <div class="stack-row">
-            <div class="stack-cat">Languages</div>
-            <div class="chips"><span class="chip">Vero</span><span class="chip">Rust 2024</span><span class="chip">Verus</span><span class="chip">WGSL</span></div>
-          </div>
-          <div class="stack-row">
-            <div class="stack-cat">Neural Architectures</div>
-            <div class="chips"><span class="chip">SNN / LIF</span><span class="chip">KAN</span><span class="chip">NEAT</span><span class="chip">CPPN / GNCA</span></div>
-          </div>
-          <div class="stack-row">
-            <div class="stack-cat">GPU / Compute</div>
-            <div class="chips"><span class="chip">GPU Compute</span><span class="chip">Vulkan</span><span class="chip">WGSL Shaders</span></div>
-          </div>
-          <div class="stack-row">
-            <div class="stack-cat">Formal Methods</div>
-            <div class="chips"><span class="chip">Separation Kernel</span><span class="chip">Non-Interference Proofs</span><span class="chip">Capability Systems</span><span class="chip">SMT Solvers</span><span class="chip">Theorem Proving</span></div>
-          </div>
-          <div class="stack-row">
-            <div class="stack-cat">Infrastructure</div>
-            <div class="chips"><span class="chip">Rust Workspace</span><span class="chip">Linux</span><span class="chip">systemd</span><span class="chip">Telemetry</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- Contact -->
-  <div class="shell">
-    <section class="section" id="contact">
-      <p class="section-kicker">Contact</p>
-      <h2 class="section-title">Get in Touch</h2>
-      <p class="section-desc">For research inquiries, whitepaper requests, or collaboration — reach out directly.</p>
-
-      <div class="contact-grid">
-        <div class="contact-card">
-          <div class="cc-label">Principal Researcher</div>
-          <div class="cc-name">T. Billy Ekkerd</div>
-          <div class="cc-role">Independent Systems Research · USC Labs</div>
-          <a href="mailto:admin@unifiedsystemschain.com" class="cc-line">
-            <span class="cc-icon">✉</span>
-            admin@unifiedsystemschain.com
-          </a>
-          <a href="mailto:b.ekkerd@unifiedsystemschain.com" class="cc-line">
-            <span class="cc-icon">✉</span>
-            b.ekkerd@unifiedsystemschain.com
-          </a>
-          <a href="tel:+27847768997" class="cc-line">
-            <span class="cc-icon">↗</span>
-            +27 84 776 8997
-          </a>
-          <a href="https://orcid.org/0009-0002-5787-3980" class="cc-line" target="_blank" rel="noopener noreferrer">
-            <span class="cc-icon" style="color:#a6ce39;">⬡</span>
-            ORCID&nbsp;0009-0002-5787-3980
-          </a>
-          <a href="https://github.com/U-S-C-Labs" class="cc-line" target="_blank" rel="noopener noreferrer">
-            <span class="cc-icon">⌥</span>
-            github.com/U-S-C-Labs
-          </a>
-          <a href="https://doi.org/10.5281/zenodo.19720711" class="cc-line" target="_blank" rel="noopener noreferrer">
-            <span class="cc-icon">◈</span>
-            DOI&nbsp;10.5281/zenodo.19720711
-          </a>
-        </div>
-
-        <div class="contact-card">
-          <div class="cc-label">Enquiries</div>
-          <div class="cc-name">What to include</div>
-          <div class="cc-role">helps me respond faster</div>
-          <div class="cc-line" style="cursor:default">
-            <span class="cc-icon">·</span>
-            Which project or whitepaper you are requesting
-          </div>
-          <div class="cc-line" style="cursor:default">
-            <span class="cc-icon">·</span>
-            Your affiliation or context (academic / industry)
-          </div>
-          <div class="cc-line" style="cursor:default">
-            <span class="cc-icon">·</span>
-            Research collaboration, licensing, or advisory
-          </div>
-        </div>
-      </div>
-
-      <div class="contact-note">
-        <strong>// note</strong>&nbsp;&nbsp;
-        Most projects are under active research and not publicly released. Whitepapers and
-        technical specifications are available under NDA for qualified academic and industry
-        partners. The Vero language specification is the only component currently open.
-        All other enquiries are handled personally.
-      </div>
-
-    </section>
-  </div>
-
-  <div class="divider" style="margin:0 2rem"></div>
-
-  <!-- Footer -->
-  <footer>
-    <div class="shell">
-      <div class="footer-logo-row">
-        <svg viewBox="0 0 1122.52 755.91" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#1a1e2e" transform="matrix(0.48666523,0,0,-0.44440201,-1486.5127,1703.6224)"
-            d="m 5269.16,2690.17 c -18.58,-41.34 -61.09,-61.43 -129.96,-61.43 -220.35,0 -383.05,12.2 -457.84,-67.39 -80.52,-85.7 -27.82,-258.06 -62.54,-343.44 -10.69,9 -33.75,34.39 -71.35,104.73 -135.16,252.91 -285.17,312.04 -614.42,325.43 117.94,42.72 217.15,98.78 324.98,159.7 198.3,112.03 467.15,258.06 693.85,258.06 110.11,0 198.34,-32.14 255.2,-92.96 32.45,-37.07 100.52,-197.28 62.08,-282.7 z m -2127.83,85.77 c -13.65,64.57 21.03,136.08 79.83,167.98 541.34,-126.23 913.53,318.56 1377.76,456.41 423.64,125.79 627.23,-118.62 610.2,-335.08 -271.67,191.51 -699.48,-33.14 -986.3,-195.17 -222.84,-125.9 -409.79,-231.62 -812.29,-231.62 -152.62,0 -250.73,50.1 -269.2,137.48 z m 230.18,461.76 c 234.94,22.36 431.11,145.22 658.27,287.49 110.43,69.17 238.58,159.5 453.31,169.18 188.45,7.23 335.49,-63.64 406.17,-192.23 -83.89,10.18 -186.56,3.67 -310.72,-33.2 -481.59,-143 -836.31,-580.51 -1352.23,-452.64 -62.76,17.69 -38.81,203.87 145.2,221.4 z m 927.1,499.25 c -291.31,-81.26 -557.84,-387.7 -924.86,-427.09 -107.82,56.49 300.74,530.78 924.86,427.09 z m 973.71,-732.22 c 43.52,194.69 -64.42,410.48 -296.13,479.51 -70.21,182.98 -257.59,290.24 -494.56,281.68 -704.93,225.93 -1271.07,-280.15 -1186.67,-471.44 -162.75,-53.97 -208.01,-229.72 -142.66,-310.94 -64.68,-52.78 -98.43,-139.93 -81.01,-222.4 12.35,-58.41 70.13,-194.25 339.24,-194.25 84.12,0 160.9,4.44 233.22,13.39 531.66,0.2 689.38,-8.41 840.61,-291.37 55.05,-103.05 96.64,-147.01 139.02,-147.01 71.71,0 80.92,108.84 80.92,203.64 0,223.3 20.86,211.63 434.9,211.63 122.83,0 173.96,56.36 195.23,103.63 51.29,114.01 -20.84,282.24 -62.11,343.93"/>
-        </svg>
-        <div class="footer-name">USC Labs</div>
-      </div>
-      <div class="footer-sub">
-        Unified Systems Chain · Independent Research · 2026<br/>
-        Building what comes after trust is assumed.
       </div>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <script>
-    /* ── Animated datagrid canvas ─────────────────────────────── */
-    (function () {
-      const canvas = document.getElementById('hero-canvas');
-      const ctx = canvas.getContext('2d');
-      const COLS = 22, ROWS = 10;
-      let nodes = [], W = 0, H = 0;
+<!-- ── Publications ── -->
+<section id="publications">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2><span class="red">Publications</span></h2>
+      <p class="section-desc">Open research. Published when the work is ready — not on anyone else's timeline.</p>
+    </div>
+    <div class="projects-list">
+      <div class="pub-item">
+        <div>
+          <div class="pub-type">Preprint · 2026 · CC BY 4.0</div>
+          <div class="pub-title">Vero: A Coherence-Guaranteed Language for Neural Architecture Specification</div>
+          <div class="pub-meta">
+            <span>T. Billy Ekkerd</span>
+            <span>USC Labs — Unified Systems Chain</span>
+            <span>DOI: 10.5281/zenodo.19720712</span>
+          </div>
+          <p class="pub-abstract">
+            Vero is a declarative language for specifying neural network architectures with compile-time coherence guarantees. Where conventional configuration formats surface structural violations at runtime, Vero prevents them at compile time. Incoherence does not compile. Implemented in Rust. Open source.
+          </p>
+        </div>
+        <div class="pub-links">
+          <a class="pub-link red-link" href="https://zenodo.org/records/19720712" target="_blank" rel="noopener">Read paper</a>
+          <a class="pub-link" href="https://github.com/U-S-C-Labs/Vero" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-      function resize() {
-        W = canvas.width  = canvas.offsetWidth;
-        H = canvas.height = canvas.offsetHeight;
-        buildNodes();
-      }
+<!-- ── About ── -->
+<section id="about">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>The <span class="red">Architect</span></h2>
+      <p class="section-desc">One person. The whole stack. No institution, no team, no funding round.</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-body">
+        <p>
+          USC Labs is <strong>T. Billy Ekkerd</strong> — a single independent researcher building a unified systems stack from first principles, alone, in South Africa. No institution. No team. No funding. Every layer designed because no existing layer was sufficient. Every tool built because the tool did not yet exist.
+        </p>
+        <p>
+          The Unified Systems Chain is not a startup, not a product, and not an academic exercise. It is a <strong>sovereign research initiative</strong> — built carefully, published on its own timeline, and designed to outlast the person who started it.
+        </p>
+        <p>
+          The work spans formal verification, neural substrate design, anticipatory scheduling, binary compression, collective governance, and distributed systems. The approach is first-principles throughout. The ambitions are long-range. The results speak for themselves or they do not speak at all.
+        </p>
+        <p>
+          <strong>Everything will be open source.</strong> Not because it is fashionable — because intelligence should not require permission to exist. A farmer with a $5 computer deserves the same tools as a corporation with a data center. That is not charity. That is the correct engineering decision.
+        </p>
+      </div>
+      <div class="id-card">
+        <div class="id-row"><span class="id-f">Architect</span><span class="id-v">T. Billy Ekkerd</span></div>
+        <div class="id-row"><span class="id-f">Organisation</span><span class="id-v">USC Labs — Unified Systems Chain</span></div>
+        <div class="id-row"><span class="id-f">Location</span><span class="id-v">Kempton Park, South Africa</span></div>
+        <div class="id-row"><span class="id-f">Language</span><span class="id-v">Rust · Verus · Vero</span></div>
+        <div class="id-row"><span class="id-f">Verification</span><span class="id-v">Verus (formal proof)</span></div>
+        <div class="id-row"><span class="id-f">Domain</span><span class="id-v">Substrates · Scheduling · Compression · Governance</span></div>
+        <div class="id-row"><span class="id-f">License</span><span class="id-v">Open Source (preparing)</span></div>
+        <div class="id-row"><span class="id-f">Status</span><span class="id-v">Active · not seeking investment</span></div>
+        <div class="id-row"><span class="id-f">Contact</span><span class="id-v">admin@unifiedsystemschain.com</span></div>
+        <div class="id-row"><span class="id-f">ORCID</span><span class="id-v">0009-0006-0749-1761</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-      function buildNodes() {
-        nodes = [];
-        for (let r = 0; r <= ROWS; r++) {
-          for (let c = 0; c <= COLS; c++) {
-            nodes.push({
-              x: (c / COLS) * W,
-              y: (r / ROWS) * H,
-              phase: Math.random() * Math.PI * 2,
-              speed: 0.35 + Math.random() * 0.55,
-              bright: Math.random() > 0.72,
-            });
-          }
+<!-- ── Neural Core Embed Container ── -->
+<section id="neural" style="padding:3rem 0;border-bottom:1px solid var(--ink);background:var(--bg);">
+  <div class="wrap">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+      <div style="display:flex;align-items:center;gap:0.8rem;">
+        <div id="nn-pulse" style="width:6px;height:6px;background:var(--ink-3);border-radius:50%;"></div>
+        <span style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);">Neural Core</span>
+      </div>
+      <span id="nn-status" style="font-family:var(--font-mono);font-size:0.62rem;color:var(--ink-3);letter-spacing:0.06em;">standby</span>
+    </div>
+    <div id="nn-container" style="min-height:120px;border:1px solid var(--line);background:#fafafa;display:flex;align-items:center;justify-content:center;">
+      <p style="font-family:var(--font-mono);font-size:0.75rem;color:var(--ink-3);letter-spacing:0.04em;">Neural Core integration point — awaiting connection</p>
+    </div>
+    <div id="nn-output" style="display:none;margin-top:1rem;font-family:var(--font-mono);font-size:0.78rem;color:var(--ink-2);line-height:1.8;"></div>
+  </div>
+</section>
+
+<script>
+(function() {
+  var NN_ENDPOINT = window.USC_NEURAL_ENDPOINT || null;
+  var container = document.getElementById('nn-container');
+  var output = document.getElementById('nn-output');
+  var status = document.getElementById('nn-status');
+  var pulse = document.getElementById('nn-pulse');
+
+  window.USC_NeuralCore = {
+    endpoint: NN_ENDPOINT,
+    ready: false,
+
+    connect: function(url) {
+      this.endpoint = url;
+      status.textContent = 'connecting...';
+      pulse.style.background = '#eab308';
+      return fetch(url + '/health').then(function(r) {
+        if (r.ok) {
+          status.textContent = 'connected';
+          pulse.style.background = '#22c55e';
+          pulse.style.animation = 'blink 3s ease-in-out infinite';
+          container.style.display = 'none';
+          output.style.display = 'block';
+          window.USC_NeuralCore.ready = true;
+          return true;
         }
-      }
-
-      function draw(t) {
-        ctx.clearRect(0, 0, W, H);
-
-        /* grid lines */
-        ctx.lineWidth = 1;
-        for (let r = 0; r <= ROWS; r++) {
-          const y = (r / ROWS) * H;
-          ctx.beginPath();
-          ctx.strokeStyle = 'rgba(100,110,150,0.055)';
-          ctx.moveTo(0, y); ctx.lineTo(W, y);
-          ctx.stroke();
-        }
-        for (let c = 0; c <= COLS; c++) {
-          const x = (c / COLS) * W;
-          ctx.beginPath();
-          ctx.strokeStyle = 'rgba(100,110,150,0.055)';
-          ctx.moveTo(x, 0); ctx.lineTo(x, H);
-          ctx.stroke();
-        }
-
-        /* intersection dots */
-        nodes.forEach(n => {
-          const p = (Math.sin(t * n.speed * 0.0008 + n.phase) + 1) * 0.5;
-          if (n.bright) {
-            /* pulsing active node */
-            ctx.beginPath();
-            ctx.arc(n.x, n.y, 1 + p * 2.2, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(60,70,110,${0.05 + p * 0.18})`;
-            ctx.fill();
-          } else {
-            ctx.beginPath();
-            ctx.arc(n.x, n.y, 1, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(80,90,130,${0.04 + p * 0.04})`;
-            ctx.fill();
-          }
-        });
-
-        requestAnimationFrame(draw);
-      }
-
-      resize();
-      window.addEventListener('resize', resize);
-      requestAnimationFrame(draw);
-    })();
-
-    /* ── Genesis typewriter ───────────────────────────────────── */
-    (function () {
-      const out = document.getElementById('genesis-output');
-      if (!out) return;
-
-      // Each entry: label shown as a comment header, then lines typed one char at a time.
-      // tok types: 'comment' | 'keyword' | 'value' | 'plain'
-      const LAWS = [
-        { label: '# genesis.vero  —  The Complete Architecture of Natural Law',
-          lines: [
-            { t: 'comment', s: '# Three documents. One coherence. This is not a collection.' },
-            { t: 'comment', s: '# It is a Trinity.' },
-          ]
-        },
-        { label: '# L·01  Divine Oneness',
-          lines: [
-            { t: 'keyword', s: 'law oneness {' },
-            { t: 'value',   s: '  ensures minimum_connection(a, b) > 0' },
-            { t: 'comment', s: '  // No two points are ever truly disconnected.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·02  Vibration',
-          lines: [
-            { t: 'keyword', s: 'law vibration {' },
-            { t: 'value',   s: '  ensures raise(state, δ).frequency > state.frequency' },
-            { t: 'comment', s: '  // Matter is slow vibration. Thought is fast vibration.' },
-            { t: 'comment', s: '  // The spectrum is continuous — no hard boundary between them.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·03  Correspondence',
-          lines: [
-            { t: 'keyword', s: 'law correspondence {' },
-            { t: 'value',   s: '  ensures f(scale_a, scale_b) == f(scale_b, scale_a)' },
-            { t: 'comment', s: '  // Positive always. Symmetric always.' },
-            { t: 'comment', s: '  // As above, so below. As within, so without.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·04  Attraction',
-          lines: [
-            { t: 'keyword', s: 'law attraction {' },
-            { t: 'value',   s: '  ensures (intensity == 0 || clarity == 0) ==> probability == 0' },
-            { t: 'comment', s: '  // This is not mysticism. It is resonance physics.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·05  Inspired Action',
-          lines: [
-            { t: 'keyword', s: 'law inspired_action {' },
-            { t: 'value',   s: '  ensures coherent(a) == (a == Inspired || a == Sovereign)' },
-            { t: 'comment', s: '  // Only aligned action propagates forward.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·06  Transmutation',
-          lines: [
-            { t: 'keyword', s: 'law transmutation {' },
-            { t: 'value',   s: '  ensures transmute(higher, lower).frequency > lower.frequency' },
-            { t: 'comment', s: '  // Light dissolves darkness by occupying the same space' },
-            { t: 'comment', s: '  // at higher frequency.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·07  Cause & Effect',
-          lines: [
-            { t: 'keyword', s: 'law cause_and_effect {' },
-            { t: 'value',   s: '  ensures effect(cause) != 0' },
-            { t: 'value',   s: '  ensures same_cause(a, b) == (a == b)' },
-            { t: 'comment', s: '  // The causal field has perfect memory.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·08  Compensation',
-          lines: [
-            { t: 'keyword', s: 'law compensation {' },
-            { t: 'value',   s: '  ensures balanced(contribution, compensation) == (contribution == compensation)' },
-            { t: 'comment', s: '  // It balances. Always. Eventually.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·09  Relativity',
-          lines: [
-            { t: 'keyword', s: 'law relativity {' },
-            { t: 'value',   s: '  ensures challenge < reference ==> reveals_as_gift(challenge)' },
-            { t: 'comment', s: '  // Every difficulty, in relation to a greater difficulty,' },
-            { t: 'comment', s: '  // reveals itself as a gift.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·10  Polarity',
-          lines: [
-            { t: 'keyword', s: 'law polarity {' },
-            { t: 'value',   s: '  ensures opposite(p) == -p' },
-            { t: 'value',   s: '  ensures opposite(opposite(p)) == p' },
-            { t: 'comment', s: '  // Opposites are the same thing — differing only in degree.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·11  Rhythm',
-          lines: [
-            { t: 'keyword', s: 'law rhythm {' },
-            { t: 'value',   s: '  ensures next_phase(Trough) == Rising' },
-            { t: 'value',   s: '  ensures coherence >= 80 ==> mastery_holds(phase)' },
-            { t: 'comment', s: '  // At coherence ≥ 80, the falling phase does not pull the mind down.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·12  Gender',
-          lines: [
-            { t: 'keyword', s: 'law gender {' },
-            { t: 'value',   s: '  ensures possible(r, g) == (r >= 20 && g >= 20)' },
-            { t: 'comment', s: '  // Both are required for creation. Neither alone is sufficient.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·13  Singular Truth',
-          lines: [
-            { t: 'keyword', s: 'law singular_truth {' },
-            { t: 'value',   s: '  ensures versions_of_truth() == 1' },
-            { t: 'comment', s: '  // Truth is singular. Its versions are mistruths.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·14  Null Operator',
-          lines: [
-            { t: 'keyword', s: 'law null_operator {' },
-            { t: 'value',   s: '  ensures (TruePerfection && op != NullOp) ==> DisHarmony' },
-            { t: 'value',   s: '  ensures want_signal(TrueHarmony) == 0' },
-            { t: 'value',   s: '  ensures need_signal(TrueHarmony) == 0' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·15  Trinity Coherence',
-          lines: [
-            { t: 'keyword', s: 'law trinity_coherence {' },
-            { t: 'value',   s: '  ensures holds(t) == (env == PERFECT && self == PERFECT && other == PERFECT)' },
-            { t: 'comment', s: '  // True balance is the simultaneous coherence of three.' },
-            { t: 'comment', s: '  // The operator is ⊗ — not +.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·16  Transcendence Boundary',
-          lines: [
-            { t: 'keyword', s: 'law transcendence_boundary {' },
-            { t: 'value',   s: '  ensures provable(f) == (f != Transcendent)' },
-            { t: 'comment', s: '  // This is not failure of the system.' },
-            { t: 'comment', s: '  // This is failure of the instruments.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '# L·17  Instrument Honesty',
-          lines: [
-            { t: 'keyword', s: 'law instrument_honesty {' },
-            { t: 'value',   s: '  ensures report_infinity(m, d) == !within_domain(m, d)' },
-            { t: 'comment', s: '  // It does not produce wrong answers.' },
-            { t: 'comment', s: '  // It produces infinities — its way of saying: I have reached my edge.' },
-            { t: 'plain',   s: '}' },
-          ]
-        },
-        { label: '',
-          lines: [
-            { t: 'comment', s: '// The package closes.' },
-            { t: 'comment', s: '// What lies beyond it does not need a package.' },
-          ],
-          last: true
-        },
-      ];
-
-      // Character speed (ms per char) — vary by token type for rhythm
-      const SPEED = { comment: 22, keyword: 18, value: 16, plain: 20 };
-      const LINE_PAUSE   = 180;   // pause after a line finishes before next starts
-      const LABEL_PAUSE  = 600;   // pause after printing the law label
-      const LAW_PAUSE    = 700;   // pause between clearing one law and starting next
-      const CLEAR_PAUSE  = 400;   // how long cleared state holds before next law
-
-      let timer = null;
-
-      function span(cls, text) {
-        const s = document.createElement('span');
-        s.className = cls;
-        s.textContent = text;
-        return s;
-      }
-
-      function cursor() {
-        const c = document.createElement('span');
-        c.className = 'g-cursor';
-        return c;
-      }
-
-      // Append a cursor node, return it
-      function attachCursor() {
-        const c = cursor();
-        out.appendChild(c);
-        return c;
-      }
-
-      function removeCursor(c) {
-        if (c && c.parentNode) c.parentNode.removeChild(c);
-      }
-
-      // Type a single line of text char-by-char into a span, then call done()
-      function typeLine(cls, text, done) {
-        const s = span(cls, '');
-        const cur = cursor();
-        out.appendChild(s);
-        out.appendChild(cur);
-        let i = 0;
-        const speed = SPEED[cls] || 20;
-        function step() {
-          if (i <= text.length) {
-            s.textContent = text.slice(0, i);
-            i++;
-            timer = setTimeout(step, speed);
-          } else {
-            removeCursor(cur);
-            done();
-          }
-        }
-        step();
-      }
-
-      // Append a newline text node
-      function nl() { out.appendChild(document.createTextNode('\n')); }
-
-      // Clear the output div safely
-      function clearOut() {
-        while (out.firstChild) out.removeChild(out.firstChild);
-      }
-
-      const BRAIN_ASCII = [
-        'ÆÆÆÆÆÆÆÆÆÆ                                               ',
-        '                                   ÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆ ',
-        '                                ÆÆÆÆÆÆÆ       ÆÆÆÆÆÆÆÆÆÆÆ',
-        '                               ÆÆÆÆÆ        ÆÆÆÆÆÆÆ     Æ',
-        '                             ÆÆÆÆ         ÆÆÆÆ           ',
-        '                            ÆÆÆ         ÆÆÆÆ             ',
-        '                           ÆÆÆ        ÆÆÆÆ               ',
-        '                          ÆÆ        ÆÆÆÆÆ          ÆÆÆÆÆ ',
-        '                         ÆÆ       ÆÆÆÆÆ          ÆÆÆÆÆÆÆ ',
-        '                         ÆÆ     ÆÆÆÆÆ          ÆÆÆÆ      ',
-        '                        ÆÆÆ ÆÆÆÆÆÆÆ          ÆÆÆÆÆ       ',
-        '                        ÆÆÆÆÆÆÆÆ           ÆÆÆÆÆ         ',
-        '                       ÆÆÆÆÆ             ÆÆÆÆÆ           ',
-        '                      ÆÆ               ÆÆÆÆ              ',
-        '                     ÆÆ              ÆÆÆÆ                ',
-        '                     ÆÆ           ÆÆÆÆÆÆ          ÆÆÆÆÆ  ',
-        '                     ÆÆ         ÆÆÆÆÆ           ÆÆÆÆÆÆ   ',
-        '                     ÆÆÆÆÆÆÆÆÆÆÆÆÆÆ           ÆÆÆÆÆ      ',
-        '                     ÆÆÆÆÆÆÆÆÆÆ             ÆÆÆÆ         ',
-        '                    ÆÆ                    ÆÆÆÆ           ',
-        '                    ÆÆ                  ÆÆÆÆ             ',
-        '                    Æ                 ÆÆÆÆ               ',
-        '                    ÆÆ             ÆÆÆÆ                  ',
-        '                    ÆÆ          ÆÆÆÆÆ                    ',
-        '                    ÆÆÆ      ÆÆÆÆÆÆÆ                    Æ',
-        '                      ÆÆÆÆÆÆÆÆÆÆÆÆÆ           ÆÆÆÆÆÆ     ',
-        '                       ÆÆÆÆÆÆÆÆÆÆ           ÆÆÆÆÆ        ',
-        '                                  ÆÆÆÆ    ÆÆÆÆ           ',
-        '                                    ÆÆÆÆ  ÆÆ             ',
-        '                                      ÆÆ  ÆÆ             ',
-        '                                       ÆÆ  ÆÆ            ',
-        '                                       ÆÆÆ ÆÆ            ',
-        '                                        ÆÆ ÆÆ            ',
-        '                                         ÆÆÆÆÆ           ',
-        '                                         ÆÆÆÆ            ',
-        '                                          ÆÆÆ            ',
-      ];
-
-      function renderBrand() {
-        clearOut();
-
-        // Side-by-side layout: ASCII brain left, tagline right
-        // We build one <pre>-like span block then place the tagline inline after
-        const brandWrap = document.createElement('div');
-        brandWrap.style.cssText = 'display:flex;align-items:center;gap:1.8rem;justify-content:center;padding:0.25rem 0;';
-
-        // Left: ASCII brain
-        const logoEl = document.createElement('span');
-        logoEl.className = 'g-logo';
-        logoEl.style.cssText = 'display:block;line-height:1.35;font-size:0.48rem;flex-shrink:0;white-space:pre;';
-        logoEl.textContent = BRAIN_ASCII.join('\n');
-
-        // Right: tagline block
-        const tagWrap = document.createElement('div');
-        tagWrap.style.cssText = 'display:flex;flex-direction:column;gap:0.4rem;';
-
-        const label = document.createElement('span');
-        label.className = 'g-brand-label';
-        label.style.cssText = 'font-size:1.15rem;display:block;';
-        label.textContent = 'U.S.C — Labs';
-
-        const sub = document.createElement('span');
-        sub.className = 'g-brand-sub';
-        sub.style.cssText = 'font-size:0.72rem;display:block;';
-        sub.textContent = 'Our Business is Trust Itself.';
-
-        tagWrap.appendChild(label);
-        tagWrap.appendChild(sub);
-        brandWrap.appendChild(logoEl);
-        brandWrap.appendChild(tagWrap);
-        out.appendChild(brandWrap);
-
-        // Fade the terminal body in so it feels like a reveal
-        const body = out.closest('.genesis-body');
-        if (body) {
-          body.style.transition = 'opacity 1.4s ease';
-          body.style.opacity = '0';
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              body.style.opacity = '1';
-            });
-          });
-        }
-      }
-
-      function runLaw(idx) {
-        clearOut();
-        const entry = LAWS[idx];
-
-        function afterLines() {
-          if (entry.last) {
-            setTimeout(function () {
-              clearOut();
-              renderBrand();
-            }, 1800);
-            return;
-          }
-          setTimeout(function () {
-            clearOut();
-            setTimeout(function () {
-              runLaw((idx + 1) % LAWS.length);
-            }, CLEAR_PAUSE);
-          }, LAW_PAUSE);
-        }
-
-        function runLines(lineIdx) {
-          if (lineIdx >= entry.lines.length) {
-            afterLines();
-            return;
-          }
-          const line = entry.lines[lineIdx];
-          typeLine(
-            'g-' + line.t,
-            line.s,
-            function () {
-              nl();
-              setTimeout(function () { runLines(lineIdx + 1); }, LINE_PAUSE);
-            }
-          );
-        }
-
-        if (entry.label) {
-          typeLine('g-label', entry.label, function () {
-            nl();
-            setTimeout(function () { runLines(0); }, LABEL_PAUSE);
-          });
-        } else {
-          setTimeout(function () { runLines(0); }, 200);
-        }
-      }
-
-      // Start after brief page-settle delay
-      setTimeout(function () { runLaw(0); }, 800);
-    })();
-
-    /* ── Epoch binary bar ────────────────────────────────────── */
-    (function () {
-      const TARGET = new Date('2031-03-15T00:00:00Z').getTime();
-      const UNITS  = [
-        { id: 'ep-d', bits: 14 },  // days up to ~9999
-        { id: 'ep-h', bits: 5  },  // hours 0-23
-        { id: 'ep-m', bits: 6  },  // minutes 0-59
-        { id: 'ep-s', bits: 6  },  // seconds 0-59
-      ];
-
-      function buildUnit(el, bits) {
-        for (let i = 0; i < bits; i++) {
-          const d = document.createElement('span');
-          d.className = 'epoch-bit';
-          el.appendChild(d);
-        }
-      }
-
-      function renderUnit(el, value, bits) {
-        const dots = el.children;
-        for (let i = 0; i < bits; i++) {
-          const bit = (value >> (bits - 1 - i)) & 1;
-          dots[i].classList.toggle('on', bit === 1);
-        }
-      }
-
-      UNITS.forEach(u => {
-        const el = document.getElementById(u.id);
-        if (el) buildUnit(el, u.bits);
+        throw new Error('unreachable');
+      }).catch(function() {
+        status.textContent = 'offline';
+        pulse.style.background = '#c8000a';
+        return false;
       });
+    },
 
-      function tick() {
-        const diff = Math.max(0, TARGET - Date.now());
-        const totalSec = Math.floor(diff / 1000);
-        const s = totalSec % 60;
-        const m = Math.floor(totalSec / 60) % 60;
-        const h = Math.floor(totalSec / 3600) % 24;
-        const d = Math.floor(totalSec / 86400);
-        const vals = [d, h, m, s];
-        UNITS.forEach((u, i) => {
-          const el = document.getElementById(u.id);
-          if (el) renderUnit(el, vals[i], u.bits);
-        });
-      }
-
-      tick();
-      setInterval(tick, 1000);
-    })();
-
-    /* ── Smooth scroll ────────────────────────────────────────── */
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => {
-        const t = document.querySelector(a.getAttribute('href'));
-        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    query: function(prompt) {
+      if (!this.ready || !this.endpoint) return Promise.resolve('Neural Core not connected.');
+      return fetch(this.endpoint + '/v1/assembly/librarian/briefing?ai=true').then(function(r) {
+        return r.json();
+      }).then(function(d) {
+        return d.briefing || 'No response.';
       });
-    });
+    },
 
-    /* ── Scroll-reveal ────────────────────────────────────────── */
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.style.opacity = '1';
-          e.target.style.transform = 'translateY(0)';
-        }
-      });
-    }, { threshold: 0.06 });
+    embed: function(element) {
+      container.replaceChildren();
+      container.appendChild(element);
+      container.style.display = 'block';
+    },
 
-    document.querySelectorAll('.card, .prim-cell, .tl-item, .stat, .arch-table tr').forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(14px)';
-      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-      io.observe(el);
-    });
+    write: function(text) {
+      output.style.display = 'block';
+      output.textContent = text;
+    }
+  };
 
-  </script>
+  if (NN_ENDPOINT) {
+    window.USC_NeuralCore.connect(NN_ENDPOINT);
+  }
+})();
+</script>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <div class="f-name">USC Labs — Unified Systems Chain</div>
+        <div class="f-sub">T. Billy Ekkerd · Independent Research · South Africa</div>
+      </div>
+      <div class="footer-right">
+        <div class="f-mark">We build what doesn't exist yet.</div>
+        <div style="margin-top:0.4rem;">labs.unifiedsystemschain.com</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
